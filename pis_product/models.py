@@ -213,7 +213,6 @@ class Product(models.Model):
         qs = (
             StockIn.objects
             .filter(product=self, reciept__isnull=False)
-            .order_by('reciept__date')[:30]
         )
         highest_price = qs.aggregate(max_price=Max('price'))['max_price']
         return highest_price or 0

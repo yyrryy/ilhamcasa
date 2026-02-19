@@ -1,4 +1,2 @@
-invoicelist 
-bonlist.html
-views.py salesand product
-urls.py
+clients/
+    Matriculation
