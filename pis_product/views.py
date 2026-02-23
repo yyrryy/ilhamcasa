@@ -548,6 +548,7 @@ def getclientdata(request):
         'phone1':supplier.customer_phone,
         'address':supplier.address,
         'ice':supplier.ice,
+        'matriculation':supplier.matriculation,
     })
 
 
@@ -919,10 +920,10 @@ def addclient(request):
     name=request.GET.get('name')
     phone=request.GET.get('phone')
     address=request.GET.get('address')
+    matriculation=request.GET.get('matriculation')
     ice=request.GET.get('ice')
     sold=request.GET.get('sold') or 0
-    print(">>>",request.GET, name, phone, address, ice)
-    client=Customer.objects.create(rest=sold, customer_name=name,customer_phone=phone, address=address, ice=ice, retailer=Retailer.objects.get(id=request.user.retailer_user.retailer.id))
+    client=Customer.objects.create(matriculation=matriculation, rest=sold, customer_name=name,customer_phone=phone, address=address, ice=ice, retailer=Retailer.objects.get(id=request.user.retailer_user.retailer.id))
     return JsonResponse({'status':True, 'id':client.id})
 
 def checkclient(request):
@@ -1705,7 +1706,6 @@ def addoneproductinbase(request):
     # get data from formData sent from the ajax request
     
     mark = request.POST.get('markinadd')
-    
     #price = request.POST.get('price')
     car=request.POST.get('carinadd').strip()
     ref=request.POST.get('refinadd').strip().lower()
@@ -2012,6 +2012,9 @@ def reportnetprofit(request):
         total=Sum('total')
     )['total'] or 0, 2)
     ventes=PurchasedProduct.objects.filter(product__pr_achat__gt=0, isavoirsupp=False, invoice__datebon__date__range=[datefrom, dateto])
+    reglements=round(PaymentClient.objects.filter(date__range=[datefrom, dateto]).aggregate(
+        total=Sum('amount')
+    )['total'] or 0, 2)
     trs=''
     totalmarge=0
     for  i in ventes:
@@ -2058,7 +2061,8 @@ def reportnetprofit(request):
         'avoirsupp':avoirsupp,
         'netprofit':round(float(sales)-float(achats)+float(avoirsupp)-float(avoircl), 2),
         'ventes':trs,
-        'totalmarge':totalmarge
+        'totalmarge':totalmarge,
+        'reglements':reglements
         # 'ventes':render(request, 'products/journalventes.html', {'sales':PurchasedProduct.objects.filter(isavoirsupp=False, created_at__year=year, created_at__month=month)}).content.decode('utf-8'),
     })
 
@@ -2694,6 +2698,7 @@ def editclient(request):
     supp.customer_phone=request.POST.get('pphone1')
     supp.address=request.POST.get('paddress')
     supp.ice=request.POST.get('pice')
+    supp.matriculation=request.POST.get('pmatriculation')
     supp.save()
     return redirect('ledger:customer_ledger_list')
 
@@ -4512,7 +4517,7 @@ def listfactures(request):
     print('>> listfactures')
 
     ctx={
-        'title':'Liste des factures',
+        'title':'List des factures',
         'bons':factures
     }
     return render(request, 'products/listfactures.html', ctx)
@@ -4531,10 +4536,12 @@ def createfacture(request):
     else:
         receipt_no = f"FC{year}000000001"
     customer=Customer.objects.get(id=request.GET.get('customer_id'))
+    bon_number=request.GET.get('bon_number')
+    
     datebon=request.GET.get('datebon')
     timebon=request.GET.get('timebon')
     datetime_str = f"{datebon} {timebon}"
-    datebon = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M')
+    datebon = datetime.strptime(datebon, '%Y-%m-%d')
     print('>> datebon', datebon)
     # make it datetime object
     # datebon=datetime.strptime(datebon, '%Y-%m-%d')
@@ -4557,6 +4564,12 @@ def createfacture(request):
             tva=tva,
             client=customer
         )
+        if len(bon_number)>1:
+            bon=SalesHistory.objects.get(receipt_no=bon_number)
+            bon.generatedtofature=True
+            facture.bon=bon
+            bon.save()
+            facture.save()
         for item in items:
             # add client price:
             product=Product.objects.get(pk=item.get('item_id'))
@@ -4565,9 +4578,9 @@ def createfacture(request):
             Outfacture.objects.create(
                 facture=facture,
                 product=product,
-                total=item.get('total'),
-                qty=item.get('qty'),
-                price=item.get('price'),
+                total=float(item.get('total')),
+                qty=float(item.get('qty')),
+                price=float(item.get('price')),
                 date=datebon,
                 client=customer
             )
@@ -4767,6 +4780,10 @@ def lowpriceachat(request):
 def deleteclientpayment(request):
     id=request.GET.get('id')
     reglement=PaymentClient.objects.get(pk=id)
+    bon=reglement.bon
+    if bon:
+        bon.paid_amount=float(bon.paid_amount)-float(reglement.amount)
+        bon.save()
     reglement.delete()
     return JsonResponse({
         'success':True
@@ -4873,3 +4890,28 @@ def listavoircomptoir(request):
         'avoirs':Avoir.objects.filter(customer=None)
     }
     return render(request, 'products/listavoircomptoir.html', ctx)
+def generebontofacture(request):
+    bonid=request.GET.get("bonid")
+    print("bonis", bonid)
+    bon=SalesHistory.objects.get(pk=bonid)
+    items=PurchasedProduct.objects.filter(invoice=bon)
+    year=timezone.now().strftime("%y")
+    latest_receipt = Facture.objects.filter(
+        facture_no__startswith=f'FC{year}'
+    ).last()
+    # latest_receipt = Bonsortie.objects.filter(
+    #     facture_no__startswith=f'BL{year}'
+    # ).order_by("-bon_no").first()
+    if latest_receipt:
+        latest_receipt_no = int(latest_receipt.facture_no[-9:])
+        receipt_no = f"FC{year}{latest_receipt_no + 1:09}"
+    else:
+        receipt_no = f"FC{year}000000001"
+    ctx={
+        "title":"Generer bon facture",
+        "customers":Customer.objects.all(),
+        'facturenumber':receipt_no,
+        'items':items,
+        'bon':bon
+    }
+    return render(request, 'products/factureview.html', ctx)

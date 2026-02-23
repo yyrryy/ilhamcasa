@@ -27,6 +27,11 @@
                             <input type="text" class="form-control" name="paddress">
                             <br>
                             <label>
+                                <strong>Matriculation</strong>
+                            </label>
+                            <input type="text" class="form-control" name="pmatriculation">
+                            <br>
+                            <label>
                                 <strong>ICE</strong>
                             </label>
                             <input type="number" class="form-control" name="pice" onKeyup = "if( this.value.length == 15) {$(this).css('border', '3px solid green')}else{$(this).css('border', '3px solid red')} ; ">
@@ -136,7 +141,7 @@
                 <th class="text-center"><i class="fa fa-bullhorn"></i>Nom</th>
                 <th class="text-center"><i class=" fa fa-bookmark"></i> Phone</th>
                 
-                <!-- <th class="text-center"><i class=" fa fa-bookmark"></i> Sold</th> -->
+                <th class="text-center"><i class=" fa fa-bookmark"></i> Sold</th>
                 <th class="text-center"></th>
             </tr>
             </thead>
@@ -146,7 +151,7 @@
 		<td><button class="btn fa fa-edit editsuppbtn" id="{{customer.id}}" data-bs-toggle="modal" data-bs-target="#editsuppmodal"></button></td>
                 <td><a href="{% url 'ledger:customer_ledger_detail' customer_id=customer.id %}">{{ customer.customer_name}}</a></td>
                 <td>{{ customer.customer_phone }}</td>
-                <!-- <td>{{ customer.rest|floatformat:2 }} DH</td> -->
+                <td>{{ customer.sold|floatformat:2 }} DH</td>
                 <td>
                 <!--     <a href="{% url 'ledger:customer_ledger_detail' customer_id=customer.id %}"><button class="btn btn-success btn-xs" title="Customer Ledger Detail"><i class="fa fa-eye"></i></button></a> -->
             </tr>
@@ -161,11 +166,12 @@
             $(el).on('click', ()=>{
                 id=$(el).attr('id')
                 $.post("{% url 'product:getclientdata' %}", {id:id}, function (data) {
-                    console.log(data.data)
+                    console.log(data)
                     $('[name="pname"]').val(data.name)
                     $('[name="pphone1"]').val(data.phone1)
                     $('[name="paddress"]').val(data.address)
                     $('[name="pice"]').val(data.ice)
+                    $('[name="pmatriculation"]').val(data.matriculation)
                 }
                 )
                 $('[name="pid"]').val(id)

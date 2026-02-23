@@ -93,13 +93,7 @@ $('#invoice').on('click', function() {
 
 </script>
 <script>
-    function genererfacture(id){
-        alertify.confirm('Generer Facture', 'Voulez-vous generer la facture ?', function(){
-            location.href=`/sales/facture/${id}/`
-        },function(){
-            alertify.error('Annuler')
-        })
-    }
+    
     // function bondata(id){
     //     $('.bondataholder').removeClass('d-none')
     //     $.post("{% url 'product:bondata' %}",{id:id},function(data){

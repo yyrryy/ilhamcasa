@@ -467,6 +467,7 @@ class Facture(models.Model):
     ispaid=models.BooleanField(default=False)
     facture_no=models.CharField(max_length=50, null=True, default=None)
     client=models.ForeignKey(Customer, on_delete=models.SET_NULL, default=None, null=True)
+    bon=models.ForeignKey("pis_sales.SalesHistory", on_delete=models.SET_NULL, default=None, null=True)
     # notes of fc
     # printed indicates that this facture was received by the client
     printed = models.BooleanField(default=False)

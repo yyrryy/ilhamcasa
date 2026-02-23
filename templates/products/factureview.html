@@ -84,9 +84,11 @@
                     + Client
                 </button>
                 <div class="mt-2">
-                    <small>Date bon</small>
+                    <strong>Date bon</strong>
                     <input type="date" name="datebon" placeholder="Date" value="{{present_date|date:'Y-m-d'}}" class="form-control datebon">
-                    <input type="time" name="timebon" placeholder="Date" value="{{present_date|date:'Y-m-d'}}" class="form-control timebon">
+                    <strong>N Bon</strong>
+                    <input type="text" readonly value="{{bon.receipt_no}}" class="form-control bon_number">
+                    <input type="time" name="timebon" placeholder="Date" value="{{present_date|date:'Y-m-d'}}" class="form-control timebon" hidden>
                 </div>
             </div>
 
@@ -139,8 +141,8 @@
                 <thead>
                 <tr class="">
                     <th style="width: 45%;">Article</th>
-                    <th>Stock</th>
-                    <th>Prix acht</th>
+                    <!-- <th>Stock</th>
+                    <th>Prix acht</th> -->
                     <th>Prix ventes</th>
                     <th>Quantité</th>
                     <th>Total</th>
@@ -148,7 +150,12 @@
                 </tr>
                 </thead>
                 <tbody class="itemsbon">
-
+                    {% for i in items %}
+                    <tr class="item-row" id="itemrow{{i.product.id}}">
+                        <td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">{{i.product.ref}} - {{i.product.car}}</strong>
+                            </td>
+                        <td><input type="hidden" class="prnet" value={{i.prnet}}><input min={{i.product.prnet}} value={{i.price}} class="form-control price" placeholder="Price" type="number" ><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: {{i.product.prnet}}</span> </td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value={{i.quantity}} ></td><td class="total">{{i.purchase_amount}}</td><input type="hidden" class="productid" value={{i.product.id}}><td><i class="btn btn-danger delete" title="Supprimer" productid="{{i.product.id}}" onclick="removeline(event, '{{i.product.id}}')"></i></td></tr>
+                    {%endfor%}
                 </tbody>
             </table>
 
@@ -479,7 +486,7 @@
         $('.addclientbtn').addClass('disabled')
     })
     $(document).ready(function () {
-
+        jQuery().invoice().init
         factureitems=JSON.parse(localStorage.getItem('factureitems'))||[]
         if (factureitems.length>0){
             $('[name="customer"]').select2().val(localStorage.getItem('clientfacture')).trigger('change')
@@ -562,7 +569,8 @@
                     showerror('Prix de vent doit etre superieur ou egal a prix net');
                     return;
                 }
-                if ($('#item-name').hasClass('item-name') == false || $('select[name="customer"]').val()==0 || $('.datebon').val()=="" || $('.timebon').val()=="") {
+                console.log($('#item-name').hasClass('item-name') == false)
+                if ($('#item-name').hasClass('item-name') == false || $('select[name="customer"]').val()==0 || $('.datebon').val()=="") {
                     showerror('Remplir les champs');
                     return;
                 }
@@ -606,7 +614,7 @@
                 var timebon=$('[name="timebon"]').val()
                 var customer_value = $('.customer').val();
                 var customer_id = $('select[name="customer"]').val();
-
+                bon_number=$(".bon_number").val()
                 const itemIds = items.map(item => item.item_id);
                 const uniqueItemIds = Array.from(new Set(itemIds));
                 console.log(items)
@@ -629,13 +637,14 @@
                         paid_amount: paid_amount,
                         payment: paid_amount,
                         returned_cash: returned_cash,
-                        items: JSON.stringify(items)
+                        items: JSON.stringify(items),
+                        bon_number:bon_number
                     }, function (result, status) {
                         localStorage.removeItem('factureitems')
                         localStorage.removeItem('pdctsinfacture')
                         localStorage.removeItem('clientfacture')
                         //window.location.href = `/ledger/customer/${$('select[name="customer"]').val()}/ledger/details/`;/sales/bon/1
-                        window.location.href = `product/listfactures`
+                        window.location.href = `/product/listfactures`
                         //
                         // refresh
                         //location.reload();

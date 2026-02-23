@@ -587,16 +587,15 @@
                 // 'month': $('select[name="month1"]').val(),
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             }, function(data, status){
-                console.log(data.netprofit>0)
-                data.netprofit>0?$('.netprofitholder').removeClass('text-danger').addClass('text-success'):$('.netprofitholder').removeClass('text-success').addClass('text-danger')
+                //console.log(data.netprofit>0)
+                //data.netprofit>0?$('.netprofitholder').removeClass('text-danger').addClass('text-success'):$('.netprofitholder').removeClass('text-success').addClass('text-danger')
                 $('.loadingnumbers').removeClass('d-flex').addClass('d-none');
                 $('.netprofit').text(data.netprofit);
                 $('.ventestr').html(data.ventes)
                 $('.totalmarge').text(data.totalmarge)
                 // totalcost and totalprofit
                 // 
-
-                $('.sales').text(data.sales);
+                $('.sales').text(data.reglements);
                 $('.avoircl').text(data.avoircl);
                 $('.avoirsupp').text(data.avoirsupp);
                 $('.achats').text(data.achats);

@@ -75,7 +75,7 @@ class SalesHistory(DatedModel):
     returned_payment = models.DecimalField(
         max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
-
+    generatedtofature=models.BooleanField(default=False)
     def __unicode__(self):
         return self.retailer.name
     @classmethod

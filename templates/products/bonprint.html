@@ -62,7 +62,6 @@
           </div>
         </div>
     </div>
-
     <!-- facture header 
     <div class="">
         <div class="d-flex justify-content-between">
@@ -78,12 +77,8 @@
             <div>
               cleint: <strong>{{facture.customer.customer_name.upper}} </strong>
             </div>
-
-
           </div>
         </div>
-
-
     </div>-->
 
     <!-- facture items -->
@@ -173,10 +168,10 @@
           </td>
         </tr>
       </table>
-      <small>Sold client: {{sold}}DH</small>
+      <!-- <small>Sold client: {{sold}}DH</small> -->
     </div>
     <hr>
-    <!-- {{user.retailer_user.retailer.name}} {{user.retailer_user.retailer.address}}<br>TEL: {{user.retailer_user.retailer.phone}} ICE: {{user.retailer_user.retailer.ice}} IF:{{user.retailer_user.retailer.id_fiscal}} TP:{{user.retailer_user.retailer.tp}} -->
+    {{user.retailer_user.retailer.name}} {{user.retailer_user.retailer.address}}<br>TEL: {{user.retailer_user.retailer.phone}} ICE: {{user.retailer_user.retailer.ice}} IF:{{user.retailer_user.retailer.id_fiscal}} PT:{{user.retailer_user.retailer.tp}}
   </div>
   {% else %}
   <div class="postion-relative px-5 facture{{facture.id}}holder p-3" style="min-height: 29.7cm;width: 21cm; border:1px solid;">

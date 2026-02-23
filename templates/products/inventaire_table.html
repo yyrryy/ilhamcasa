@@ -1,6 +1,6 @@
 {% for i in products %}
 <tr>
-    <td>{{i.ref}}</td>
+    <td>{{i.ref}} {% if i.stock == 0 %}<i class="text-danger fa fa-exclamation-circle fa-2x"></i>{% endif %}</td>
     <td>{{i.car}}</td>
     <td>{{i.stock}}</td>
     <td>

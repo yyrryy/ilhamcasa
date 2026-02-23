@@ -434,7 +434,7 @@ class GenerateInvoiceAPIView(View):
         remaining_payment = self.request.POST.get('remaining_amount')
         amount = self.request.POST.get('amount') or 0
         mode = self.request.POST.get('mode')
-        echeance = self.request.POST.get('echeance')
+        echeance = self.request.POST.get('echeance') or None
         npiece = self.request.POST.get('npiece')
         cash_payment = self.request.POST.get('cash_payment')
         returned_cash = self.request.POST.get('returned_cash')
@@ -559,7 +559,7 @@ class GenerateInvoiceAPIView(View):
             self.invoice.save()
             # add sold to client
             customer.rest=float(customer.rest)+float(grand_total)-float(amount)
-            print('amount>>', amount, mode, echeance, npiece)
+            #print('amount>>', amount, mode, echeance, npiece)
             if float(amount)>0:
                 PaymentClient.objects.create(
                     client=customer,

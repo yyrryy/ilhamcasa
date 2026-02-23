@@ -13,15 +13,18 @@
     </a>
     {% else %}
 
-    <a href="{% if bon.customer %}/sales/update/{{bon.id}}/api/{% else %}/product/modifierboncomptoir/{{bon.id}}{% endif%}" type="button" class="btn btn-primary me-5">
-        Modifier
-    </a>
-    <button type="button" class="btn btn-primary" onclick="printbon('{{bon.id}}')">
+    
+    <button type="button" class="btn btn-primary me-3" onclick="printbon('{{bon.id}}')">
         Bon
     </button>
-    <!-- <button onclick="printfacture({{bon.id}})" type="button" class="btn btn-primary">
-        Factuer
-    </button> -->
+    {% if not bon.generatedtofature%}
+    <a href="{% if bon.customer %}/sales/update/{{bon.id}}/api/{% else %}/product/modifierboncomptoir/{{bon.id}}{% endif%}" type="button" class="btn btn-primary me-3">
+        Modifier
+    </a>
+    <button onclick="generebontofacture({{bon.id}})" type="button" class="btn btn-primary">
+        Generer Factuer
+    </button>
+    {% endif %}
     {% endif %}
   </div>
 <div class="bg-white rounded shadow" id="print-invoice" style="padding: 10px">

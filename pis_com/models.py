@@ -84,6 +84,7 @@ class Customer(models.Model):
     rest= models.DecimalField(max_digits=65, decimal_places=2, default=0.00)
     customer_name = models.CharField(max_length=200)
     customer_phone = models.CharField(max_length=20, blank=True, null=True)
+    matriculation = models.CharField(max_length=20, blank=True, null=True)
     customer_type=models.CharField(max_length=200, default='customer', blank=True, null=True)
     ice=models.CharField(max_length=200, default='customer', blank=True, null=True)
     address = models.TextField(max_length=500, blank=True,null=True)
@@ -92,16 +93,16 @@ class Customer(models.Model):
 
     def __unicode__(self):
         return self.customer_name
-    # def sold(self):
-    #     from pis_sales.models import SalesHistory
-    #     from pis_product.models import Avoir, PaymentClient 
-    #     bons = SalesHistory.objects.filter(customer=self)
-    #     paid_amount=bons.aggregate(Sum('paid_amount')).get('paid_amount__sum') or 0
-    #     avoirs = Avoir.objects.filter(customer=self)
-    #     payments=PaymentClient.objects.filter(client=self)
-    #     totalcredit=(avoirs.aggregate(Sum('grand_total')).get('grand_total__sum') or 0)+(payments.aggregate(Sum('amount')).get('amount__sum') or 0)
-    #     totalbons=bons.aggregate(Sum('grand_total')).get('grand_total__sum') or 0
-    #     return float(totalbons)-float(totalcredit)-float(paid_amount)
+    def sold(self):
+        from pis_sales.models import SalesHistory
+        from pis_product.models import Avoir, PaymentClient 
+        bons = SalesHistory.objects.filter(customer=self)
+        paid_amount=bons.aggregate(Sum('paid_amount')).get('paid_amount__sum') or 0
+        avoirs = Avoir.objects.filter(customer=self)
+        payments=PaymentClient.objects.filter(client=self)
+        totalcredit=(avoirs.aggregate(Sum('grand_total')).get('grand_total__sum') or 0)+(payments.aggregate(Sum('amount')).get('amount__sum') or 0)
+        totalbons=bons.aggregate(Sum('grand_total')).get('grand_total__sum') or 0
+        return float(totalbons)-float(totalcredit)-float(paid_amount)
 
 
 class FeedBack(models.Model):

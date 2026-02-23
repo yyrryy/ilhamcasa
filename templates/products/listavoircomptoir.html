@@ -83,13 +83,7 @@ $('#devi').on('click', function() {
 
 </script>
 <script>
-    function genererfacture(id){
-        alertify.confirm('Generer Facture', 'Voulez-vous generer la facture ?', function(){
-            location.href=`/sales/facture/${id}/`
-        },function(){
-            alertify.error('Annuler')
-        })
-    }
+    
     function devisdata(id){
         $('.bondataholder').removeClass('d-none')
         $.post("{% url 'product:devisdata' %}",{id:id},function(data){
