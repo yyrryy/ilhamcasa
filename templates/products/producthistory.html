@@ -42,10 +42,10 @@
                         <th>Sorties</th>
                         <th>{{totalout}}</th>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <th>Stock facture</th>
                         <th>{{product.stockfacture}}</th>
-                    </tr>
+                    </tr> -->
                     <tr style="background: {%if product.stock <= 0%}red{%elif product.stock > 0 and product.stock == product.minstock%} yellow {%else%}yellowgreen{%endif%}; color:black;">
                         <th>Stock</th>
                         <th><strong class="oldstockqty">{{product.stock|floatformat:-2}} </strong>
@@ -68,10 +68,10 @@
                             </div> -->
                         </th>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <th>Prix pondiré (Net)</th>
                         <th>{{product.pondire}} DH</th>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <th>Dernier prix achat</th>
                         <th>{{product.pr_achat}} DH</th>

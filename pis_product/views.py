@@ -564,13 +564,14 @@ def relveclient(request):
     # end_date = make_aware(end_date)
     # print(start_date, end_date)
     bons = SalesHistory.objects.filter(customer_id=customer, datebon__range=[start_date, end_date]).order_by('datebon')
-    print('>> count', bons.count())
-    paid_amount=bons.aggregate(Sum('paid_amount')).get('paid_amount__sum') or 0
+    factures = Facture.objects.filter(client_id=customer, date__range=[start_date, end_date]).order_by('date')
+    #paid_amount=bons.aggregate(Sum('paid_amount')).get('paid_amount__sum') or 0
     avoirs = Avoir.objects.filter(customer_id=customer, dateavoir__range=[start_date, end_date])
-    payments=PaymentClient.objects.filter(isfacture=False, client_id=customer, date__range=[start_date, end_date])
+    payments=PaymentClient.objects.filter(client_id=customer, date__range=[start_date, end_date])
     sales_and_returns = chain(bons, avoirs, payments)
     customer=Customer.objects.get(pk=customer)
     totalbons=bons.aggregate(Sum('grand_total')).get('grand_total__sum') or 0
+    totalfactures=factures.aggregate(Sum('total')).get('total__sum') or 0
     totalcredit=(avoirs.aggregate(Sum('grand_total')).get('grand_total__sum') or 0)+(payments.aggregate(Sum('amount')).get('amount__sum') or 0)
 
     def get_date(item):
@@ -585,11 +586,15 @@ def relveclient(request):
             return obj.date
         elif type_ == 'bonachat':
             return obj.bondate
+        elif type_ == 'facture':
+            return obj.date
         else:
             raise ValueError("Unknown type: {}".format(type_))
     # Combine all items
     releve = [
         (bon, 'bon') for bon in bons
+    ] + [
+        (facture, 'facture') for facture in factures
     ] + [
         (avoir, 'avoir') for avoir in avoirs
     ] + [
@@ -615,7 +620,7 @@ def relveclient(request):
     bonsclient = SalesHistory.objects.filter(customer=customer)
     paid_amounclientt= bons.aggregate(Sum('paid_amount')).get('paid_amount__sum') or 0
     avoirsclient = Avoir.objects.filter(customer=customer)
-    paymentsclient= PaymentClient.objects.filter(client=customer, isfacture=False)
+    paymentsclient= PaymentClient.objects.filter(client=customer)
     totalbonsclient=bonsclient.aggregate(Sum('grand_total')).get('grand_total__sum') or 0
     totalcreditclient=(avoirsclient.aggregate(Sum('grand_total')).get('grand_total__sum') or 0)+(paymentsclient.aggregate(Sum('amount')).get('amount__sum') or 0)
     soldclient=float(totalbonsclient)-float(totalcreditclient)
@@ -627,9 +632,9 @@ def relveclient(request):
     sorted_releve = sorted(releve, key=get_date)
     #print('>> ', [i for i in sorted_releve])
     return render(request, 'products/relveclient.html', {'releve':sorted_releve, 'sales_and_returns': sales_and_returns, 'bons': bons, 'avoirs':avoirs, 'payments':payments, 'title':f'Relevé client {customer} du {start_date_str} au {end_date_str}', 'customer':customer, 'start_date':start_date_str, 'end_date':end_date_str,
-    'totaldebit':totalbons,
+    'totaldebit':float(totalbons)+float(totalfactures),
     'totalcredit':totalcredit,
-    'soldperiod':soldperiod,
+    'soldperiod':float(totalbons)+float(totalfactures)-float(totalcredit),
     'soldclient':soldclient
     })
 
@@ -1414,10 +1419,11 @@ def addbulk(request):
             prnet=prachatnet,
             category_id=category,
         )
-        StockIn.objects.create(
-            product=product,
-            quantity=d.stock,
-        )
+        if d.stock>0:
+            StockIn.objects.create(
+                product=product,
+                quantity=d.stock,
+            )
     #return a json response
     return redirect('index')
 
@@ -1986,6 +1992,7 @@ def reports(request):
         #avances+=SalesHistory.totalclientavance(customer=i)
         reglements+=PaymentClient.totalclientbl(customer=i)
     soldclients=round(bons-avoirs-reglements, 2)
+    soldclients=sum([i.sold() for i in clients])
     print('>>', bons, avoirs, reglements, soldclients)
     return render(request, 'products/reports.html', {'title':'Rapports', 'stockgeneral':stockgeneral, 'soldclients':soldclients, 'soldsuppliers':soldsuppliers})
 
@@ -2475,57 +2482,57 @@ def addsupply(request):
                 remise=remise,
                 reciept=reciept
             )
-            if facture:
-                product.stockfacture=float(product.stockfacture)+float(i['qty'])
-            else:
-                product.stock=float(product.stock)+float(i['qty'])
-                if product.stock > 0:
-                # sum of all qty / qty*prices
-                    newnet=round(float(i['price'])-((float(i['price'])*remise)/100), 2)
-                    print('oldnet, newnet', product.prnet, newnet)
-                    totalqtys=int(product.stock)+int(i['qty'])
-                    if product.pondire>0:
-                        actualtotal=float(product.pondire)*float(product.stock)
-                    else:
-                        actualtotal=float(product.prnet)*float(product.stock)
-                    totalprices=round((float(i['qty'])*newnet)+actualtotal, 2)
-                    pondire=round(totalprices/totalqtys, 2)
-                    #print(f'ttalqtys {totalqtys}, totalprices {totalprices}, pondire {pondire}')
-                    # assign pondire with 35%
-                    #product.pondire=round((pondire*100)/65, 2)
-                    product.pondire=pondire
-                
-                prices=json.loads(product.prices)
-
-                prices.append([f'{supplier.name} - {reciept.nbon}', bondate, float(i['price']), float(i['qty'])])
+            # if facture:
+            #     product.stockfacture=float(product.stockfacture)+float(i['qty'])
+            # else:
+            product.stock=float(product.stock)+float(i['qty'])
+            if product.stock > 0:
+            # sum of all qty / qty*prices
+                newnet=round(float(i['price'])-((float(i['price'])*remise)/100), 2)
+                print('oldnet, newnet', product.prnet, newnet)
+                totalqtys=int(product.stock)+int(i['qty'])
+                if product.pondire>0:
+                    actualtotal=float(product.pondire)*float(product.stock)
+                else:
+                    actualtotal=float(product.prnet)*float(product.stock)
+                totalprices=round((float(i['qty'])*newnet)+actualtotal, 2)
+                pondire=round(totalprices/totalqtys, 2)
+                #print(f'ttalqtys {totalqtys}, totalprices {totalprices}, pondire {pondire}')
+                # assign pondire with 35%
+                #product.pondire=round((pondire*100)/65, 2)
+                product.pondire=pondire
             
-                product.pr_achat=float(i['price'])
-                prnet=round(float(i['price'])-(float(i['price'])*float(remise/100)), 2)
-                product.prnet=prnet
-                product.remise=remise
-                
-                product.prices=json.dumps(prices)
-                product.command=False
-                product.originsupp=supplier
-                product.supplier=None
-                print('>>>> prices', i['prventmag'], i['prventgro'])
-                # if int(i['prventmag'])>0:
-                #     product.price=i['prventmag']
-                # if int(i['prventgro'])>0:
-                #     product.prvente=i['prventgro']
-                print('>> price', i['price'])
-                
-                supplier.total=float(request.POST.get('total'))+float(supplier.total)
-                supplier.rest=float(request.POST.get('total'))+float(supplier.rest)
-                supplier.save()
+            prices=json.loads(product.prices)
+
+            prices.append([f'{supplier.name} - {reciept.nbon}', bondate, float(i['price']), float(i['qty'])])
+        
+            product.pr_achat=float(i['price'])
+            prnet=round(float(i['price'])-(float(i['price'])*float(remise/100)), 2)
+            product.prnet=prnet
+            product.remise=remise
+            
+            product.prices=json.dumps(prices)
+            product.command=False
+            product.originsupp=supplier
+            product.supplier=None
+            print('>>>> prices', i['prventmag'], i['prventgro'])
+            # if int(i['prventmag'])>0:
+            #     product.price=i['prventmag']
+            # if int(i['prventgro'])>0:
+            #     product.prvente=i['prventgro']
+            print('>> price', i['price'])
+            
+            supplier.total=float(request.POST.get('total'))+float(supplier.total)
+            supplier.rest=float(request.POST.get('total'))+float(supplier.rest)
+            supplier.save()
             product.save()
-            originref=product.ref.split(' ')[0]
-            simillar = Product.objects.filter(category=product.category.id).filter(Q(ref__startswith=originref+' ') | Q(ref=originref))
-            simillar.update(disponibleinother=True)
-            simillar.update(rcommand=False)
-            simillar.update(command=False)
-            simillar.update(supplier=None)
-            simillar.update(commanded=False)
+            # originref=product.ref.split(' ')[0]
+            # simillar = Product.objects.filter(category=product.category.id).filter(Q(ref__startswith=originref+' ') | Q(ref=originref))
+            # simillar.update(disponibleinother=True)
+            # simillar.update(rcommand=False)
+            # simillar.update(command=False)
+            # simillar.update(supplier=None)
+            # simillar.update(commanded=False)
 
     return JsonResponse({
         'success': True,
@@ -4104,9 +4111,9 @@ def createfacturemanual(request):
                     stock_out_form = StockOutForm(stock_out_form_kwargs)
                     if stock_out_form.is_valid():
                         stock_out = stock_out_form.save()
-            except Product.DoesNotExist:
-                pass
-
+            except Exception as e:
+                with open("errors.txt", 'a') as f:
+                    print(str(e), file=f)
 
         invoice.purchased_items.set(purchased_items_id)
         invoice.extra_items.set(extra_items_id)
@@ -4573,7 +4580,7 @@ def createfacture(request):
         for item in items:
             # add client price:
             product=Product.objects.get(pk=item.get('item_id'))
-            product.stockfacture-=float(item.get('qty'))
+            product.stock-=float(item.get('qty'))
             product.save()
             Outfacture.objects.create(
                 facture=facture,
@@ -4725,12 +4732,14 @@ def genererdevistobonpage(request):
 
 def soldclient(request):
     id=request.GET.get('id')
-    bons = SalesHistory.objects.filter(customer_id=id)
-    avoirs = Avoir.objects.filter(customer_id=id)
-    payments=PaymentClient.objects.filter(client_id=id)
-    totalbons=bons.aggregate(Sum('grand_total')).get('grand_total__sum') or 0
+    bons = SalesHistory.objects.filter(customer=self)
+    factures = Facture.objects.filter(client=self)
+    avoirs = Avoir.objects.filter(customer=self)
+    payments=PaymentClient.objects.filter(client=self)
     totalcredit=(avoirs.aggregate(Sum('grand_total')).get('grand_total__sum') or 0)+(payments.aggregate(Sum('amount')).get('amount__sum') or 0)
-    sold=float(totalbons)-float(totalcredit)
+    totalbons=bons.aggregate(Sum('grand_total')).get('grand_total__sum') or 0
+    totalfactures=factures.aggregate(Sum('total')).get('total__sum') or 0
+    sold = float(totalbons)+float(totalfactures)-float(totalcredit)
 
     return JsonResponse({
         'sold':sold

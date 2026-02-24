@@ -4,12 +4,13 @@ echeance iun reglement clients in espece..
 date de paimentent in report ..
 data of company in bottom of bon ..
 button generer facture in bondata ..
+RELEVE ADD ALSO FACTURE..
+REMOVE MARK IN ADD PRODUCT..
+PAIMENT REMOVE ECHEANCE AND NPIECE IN ESPECE..
+CREDIT TOTAL OF CLIENT IN A LIST..
 add bon command number in field in bon
 devis generer bon or facture
-RELEVE ADD ALSO FACTURE
 RAPPORT ONLY SHOZ PAID BONS OR FACTURES
-PAIMENT REMOVE ECHEANCE AND NPIECE IN ESPECE..
-REMOVE MARK IN ADD PRODUCT
-CREDIT TOTAL OF CLIENT IN A LIST
 ability to edit name of product in 
 delete reglement..
+show sortie facture in product history

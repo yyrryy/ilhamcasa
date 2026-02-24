@@ -37,6 +37,8 @@
                           {% if i.0.dateavoir == None %}{{i.0.created_at|date:"d/m/Y"}}{% else %}  {{i.0.dateavoir|date:"d/m/Y"}} {% endif %}
                         {% elif i.1 == 'reglement' or i.1 == 'relementsupp' or i.1 == 'avoirsupp' %}
                         {{i.0.date |date:'d/m/Y'}}
+                        {% elif i.1 == 'facture' %}
+                        {{i.0.date |date:'d/m/Y'}}
                         {% else %}
                         {{i.0.bondate |date:'d/m/Y'}}
                         {% endif %}
@@ -47,11 +49,13 @@
                         {% elif i.1 == 'avoir'%}
                         Avoir {{i.0.receipt_no}}
                         {% elif i.1 == 'reglement'%}
-                        Reglement {{i.0.mode}} {% if i.0.npiece %}{{i.0.npiece}} {% endif %} {% if i.0.note %}({{i.0.note}}){% endif %} bon: {{i.0.bon.receipt_no}}
+                        Reglement {{i.0.mode}} {% if i.0.npiece %}{{i.0.npiece}} {% endif %} {% if i.0.note %}({{i.0.note}}){% endif %} {% if i.0.bon.receipt_no%}bon: {{i.0.bon.receipt_no}}{% endif %}
                         {% elif i.1 == 'relementsupp' %}
                         Reglement Frn. {{i.0.mode}} {% if i.0.npiece %}{{i.0.npiece}} {% endif %} {% if i.0.note %}({{i.0.note}}){% endif %}
                         {% elif i.1 == 'avoirsupp' %}
                         Avoir Frn. {{i.0.receipt_no}}
+                        {% elif i.1 == 'facture' %}
+                        Facture {{i.0.facture_no}}
                         {% else %}
                         Bon achat N°{{i.0.nbon}}
                         {% endif %}
@@ -64,6 +68,8 @@
                         {{i.0.amount}}
                         {% elif i.1 == 'avoirsupp' %}
                         {{i.0.total}}
+                        {% elif i.1 == 'facture' %}
+                        {{i.0.total}}
                         {% endif %}
                       </td>
                       <td>
@@ -72,8 +78,7 @@
                         {% elif i.1 == 'reglement'%}
                         {{i.0.amount}}
                         {% elif i.1 == 'avoirsupp'%}
-                        {% else %}
-                        {{i.0.total}}
+                        
                         {% endif %}
                       </td>
 
@@ -104,7 +109,7 @@
 
               </table>
                 <strong>
-                  sold client: {{soldclient|floatformat:2 }}  DH
+                  sold client: {{customer.sold|floatformat:2 }}  DH
                 </strong> 
         </div>
 
