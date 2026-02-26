@@ -8,9 +8,13 @@ RELEVE ADD ALSO FACTURE..
 REMOVE MARK IN ADD PRODUCT..
 PAIMENT REMOVE ECHEANCE AND NPIECE IN ESPECE..
 CREDIT TOTAL OF CLIENT IN A LIST..
+delete reglement..
 add bon command number in field in bon
 devis generer bon or facture
 RAPPORT ONLY SHOZ PAID BONS OR FACTURES
-ability to edit name of product in 
-delete reglement..
+ability to edit name of product in
 show sortie facture in product history
+cosommable not sho in inventaire or in stock table
+quantity before price in creation bon
+factures in client history
+facture genere paid if bon paid and client need to show directly
