@@ -72,6 +72,11 @@
             <div class="col-md-3 mt-3 d-flex flex-column">
                 <select class="form-selsect select2 customer 
  clientselectbl " name="customer" id="customer">
+                    {% if bon %}
+                    <option value="{{bon.customer.id}}">
+                        {{bon.customer.customer_name}}
+                    </option>
+                    {%endif%}
                     <option value="0">
                         Client
                     </option>

@@ -397,18 +397,18 @@ def inventaire(request):
         typestock=request.POST.get('typestock')
         if id=='0':
             if typestock=='0':
-                products=Product.objects.filter(stock__lte=0).order_by('ref')
+                products=Product.objects.filter(stock__lte=0).exclude(category__name="consommable").order_by('ref')
             elif typestock=='1':
-                products=Product.objects.filter(stock__gt=0).order_by('ref')
+                products=Product.objects.filter(stock__gt=0).exclude(category__name="consommable").order_by('ref')
             else:
-                products=Product.objects.filter().order_by('ref')
+                products=Product.objects.exclude(category__name="consommable").order_by('ref')
         else:
             if typestock=='0':
-                products=Product.objects.filter(category_id=id, stock__lte=0).order_by('ref')
+                products=Product.objects.filter(category_id=id, stock__lte=0).exclude(category__name="consommable").order_by('ref')
             elif typestock=='1':
-                products=Product.objects.filter(category_id=id, stock__gt=0).order_by('ref')
+                products=Product.objects.filter(category_id=id, stock__gt=0).exclude(category__name="consommable").order_by('ref')
             else:
-                products=Product.objects.filter(category_id=id).order_by('ref')
+                products=Product.objects.filter(category_id=id).exclude(category__name="consommable").order_by('ref')
         totalstockvalue=round(sum([i.stockvalue() for i in products]), 2)
         # trs=''
         # for i in products:
@@ -1927,6 +1927,7 @@ def producthistory(request, id):
     product=Product.objects.get(pk=id)
     pr=StockIn.objects.filter(product=product).order_by('-dated_order')
     stockout=PurchasedProduct.objects.filter(product=product, invoice__ismanual=False, invoice__isdevis=False)
+    factureout=Outfacture.objects.filter(product=product)
     outavoirsupp= PurchasedProduct.objects.filter(product=product, isavoirsupp=True)
     totalouts=(stockout.aggregate(Sum('quantity')).get('quantity__sum') or 0)+(outavoirsupp.aggregate(Sum('quantity')).get('quantity__sum') or 0)
     allouts = sorted(chain(stockout, outavoirsupp), key=attrgetter('created_at'), reverse=True)
@@ -1935,7 +1936,7 @@ def producthistory(request, id):
     totalcost=round(float(totalin)*float(product.pr_achat), 2)
     prices=json.loads(product.prices)
     # print('>>>>>>>>>>', prices)
-    ctx={ 'title':'Historique Article', 'stockin':pr, 'product':product,  'totalin':totalin, 'totalcost':totalcost, 'netprofit':0
+    ctx={ 'title':'Historique Article', 'stockin':pr, 'product':product,  'totalin':totalin, 'totalcost':totalcost, 'netprofit':0, "outfacture":factureout
         # 'prices':json.loads(product.prices)[1:],
         # 'ziped':zip(pr, prices)
     }
@@ -4432,7 +4433,7 @@ def addpaymentbon(request):
         mode=mode,
         npiece=npiece,
         bon=bon,
-        date=timezone.now()
+        date=timezone.now().date()
     )
     if echeance:
         pay.echeance=echeance
@@ -4576,6 +4577,8 @@ def createfacture(request):
             bon.generatedtofature=True
             facture.bon=bon
             bon.save()
+            if bon.paid_amount==bon.grand_total:
+                facture.ispaid=True
             facture.save()
         for item in items:
             # add client price:
