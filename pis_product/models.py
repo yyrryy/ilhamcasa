@@ -128,7 +128,7 @@ class PaymentClient(models.Model):
 
 # this acts as a bon achat
 class Itemsbysupplier(models.Model):
-    supplier= models.ForeignKey(Supplier, related_name='supplier',on_delete=models.CASCADE, default=None)
+    supplier= models.ForeignKey(Supplier, related_name='supplier',on_delete=models.CASCADE, default=None, null=True)
     date = models.DateTimeField(auto_now_add=True)
     items = models.TextField(blank=True, null=True, help_text='Quantity and Product name would save in JSON format')
     total = models.DecimalField(max_digits=65, decimal_places=2, default=0.00)
