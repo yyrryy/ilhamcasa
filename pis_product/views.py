@@ -1396,28 +1396,28 @@ def getproducts(request):
 @csrf_exempt
 def addbulk(request):
     # get the uploaded file
-    category=request.POST.get('category')
+    #category=request.POST.get('category')
     myfile=request.FILES[next(iter(request.FILES))]
     retailer=Retailer.objects.get(id=request.user.retailer_user.retailer.id)
 
     df = pd.read_excel(myfile)
     df = df.fillna('0')
     for d in df.itertuples():
-        prachatnet=round(float(d.prixachat)-(float(d.prixachat)*float(d.remise)/100), 2)
+        #prachatnet=round(float(d.prixachat)-(float(d.prixachat)*float(d.remise)/100), 2)
         product = Product.objects.create(
             retailer_id=1,
             ref=d.ref,
-            mark_id=d.mark,
+            #mark_id=d.mark,
             car=d.designation,
             stock=d.stock,
-            remise=d.remise,
-            minstock=d.minstock,
+            #remise=d.remise,
+            #minstock=d.minstock,
             pr_achat=d.prixachat,
             price=d.prixventemag,
-            prvente=d.prixventegro,
-            originsupp_id=d.fournisseur,
-            prnet=prachatnet,
-            category_id=category,
+            #prvente=d.prixventegro,
+            #originsupp_id=d.fournisseur,
+            prnet=d.prixachat,
+            category_id=d.category,
         )
         if d.stock>0:
             StockIn.objects.create(
