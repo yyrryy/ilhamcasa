@@ -421,8 +421,8 @@ class GenerateInvoiceAPIView(View):
         customer=Customer.objects.get(id=request.POST.get('customer_id'))
         datebon=self.request.POST.get('datebon')
         timebon=self.request.POST.get('timebon')
-        datetime_str = f"{datebon} {timebon}"
-        datebon = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M')
+        #datetime_str = f"{datebon} {timebon}"
+        datebon = datetime.strptime(datebon, '%Y-%m-%d')
         print('>> datebon', datebon)
         # make it datetime object
         # datebon=datetime.strptime(datebon, '%Y-%m-%d')
