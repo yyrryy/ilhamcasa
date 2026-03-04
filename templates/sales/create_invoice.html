@@ -666,7 +666,7 @@
                     return;
                 }
 
-                if (($.inArray(true, $('.price').map((t, i)=>$(i).val()=="")) !== -1)||($.inArray(true, $('.qty').map((t, i)=>$(i).val()=="")) !== -1) || ($.inArray(true, $('.price').map((t, i)=>$(i).val()==0)) !== -1)||($.inArray(true, $('.qty').map((t, i)=>$(i).val()==0)) !== -1)) {
+                if (($.inArray(true, $('.price').map((t, i)=>$(i).val()=="")) !== -1)||($.inArray(true, $('.qty').map((t, i)=>$(i).val()=="")) !== -1) || ($.inArray(true, $('.qty').map((t, i)=>$(i).val()==0)) !== -1)) {
 
                     showerror('املئ خانة الثمن');
                     $('.price').css('border-color', 'red');
