@@ -39,7 +39,7 @@
             </h5>
             <div class="mt-2">
                 <small>Date bon</small>
-                <input readonly type="date" name="datebon" placeholder="Date" value="{{invoice.created_at|date:'Y-m-d'}}" class="form-control">
+                <input type="date" name="datebon" placeholder="Date" value="{{invoice.created_at|date:'Y-m-d'}}" class="form-control datebon">
             </div>
             <div class="mt-2">
                 <small>N° bon</small>
@@ -490,7 +490,7 @@
                     return;
                 }
 
-                if (($.inArray(true, $('.price').map((t, i)=>$(i).val()=="")) !== -1)||($.inArray(true, $('.qty').map((t, i)=>$(i).val()=="")) !== -1) || ($.inArray(true, $('.price').map((t, i)=>$(i).val()==0)) !== -1)||($.inArray(true, $('.qty').map((t, i)=>$(i).val()==0)) !== -1)) {
+                if (($.inArray(true, $('.price').map((t, i)=>$(i).val()=="")) !== -1)||($.inArray(true, $('.qty').map((t, i)=>$(i).val()=="")) !== -1) || ($.inArray(true, $('.qty').map((t, i)=>$(i).val()==0)) !== -1)) {
 
                     showerror('املئ خانة الثمن');
                     $('.price').css('border-color', 'red');
@@ -519,7 +519,7 @@
                 var grand_total = $('#grandTotal').text();
                 var remaining_amount = $('#remainingAmount').text();
                 var paid_amount = $('#paidAmount').val();
-
+                var datebon=$('[name="datebon"]').val()
 
                 const itemIds = items.map(item => item.item_id);
                 const uniqueItemIds = Array.from(new Set(itemIds));
@@ -531,6 +531,7 @@
                         console.log("sending");
                         $.post("{% url 'sales:update_invoice_api' %}", {
                             'invoice_id': {{invoice.id}},
+                            'datebon':datebon,
                             'items': JSON.stringify(items),
                             'grand_total': grand_total,
                             'customerid':$('#customer').val(),

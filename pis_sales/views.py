@@ -681,6 +681,8 @@ class UpdateInvoiceAPIView(View):
     def post(self, request, *args, **kwargs):
         invoiceid=request.POST.get('invoice_id')
         customerid=request.POST.get('customerid')
+        datebon=request.POST.get('datebon')
+        datebon = datetime.strptime(datebon, '%Y-%m-%d')
         print('>>> cust', customerid)
         invoice = SalesHistory.objects.get(id=invoiceid)
         purcheses=PurchasedProduct.objects.filter(invoice=invoice)
@@ -742,6 +744,8 @@ class UpdateInvoiceAPIView(View):
 
 
         invoice.grand_total=request.POST.get('grand_total')
+        invoice.datebon=datebon
+        invoice.created_at=datebon
         invoice.customer_id=customerid
         invoice.save()
         # # customer_name = self.request.POST.get('customer_name')
