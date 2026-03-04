@@ -1421,7 +1421,7 @@ def addbulk(request):
         )
         if d.stock>0:
             StockIn.objects.create(
-                price=d.prixventemag,
+                price=d.prixachat,
                 reciept=reciept,
                 product=product,
                 quantity=d.stock,
