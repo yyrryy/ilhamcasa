@@ -12,9 +12,12 @@ RAPPORT ONLY SHOZ PAID BONS OR FACTURES..
 delete reglement..
 cosommable not sho in inventaire or in stock table..
 facture genere paid if bon paid and client need to show directly..
+prix error in bon must not show..
+add fix in configuration
 show sortie facture in product history
 add bon command number in field in bon
 devis generer bon or facture
 ability to edit name of product in
 quantity before price in creation bon
 factures in client history
+

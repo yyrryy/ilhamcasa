@@ -67,11 +67,13 @@ Invoice.prototype = {
                     if ($(this).val() == min) {
                         $(this).parent().parent().addClass('pricenet');
                         priceerror.addClass('d-none');
-                    } else if ($(this).val() < min) {
-                        $(this).parent().parent().removeClass('pricenet');
-                        $(this).css('border-color', 'red');
-                        priceerror.removeClass('d-none');
-                    }else{
+                    } 
+                    //else if ($(this).val() < min) {
+                    //     $(this).parent().parent().removeClass('pricenet');
+                    //     $(this).css('border-color', 'red');
+                    //     priceerror.removeClass('d-none');
+                    // }
+                    else{
                         $(this).parent().parent().removeClass('pricenet');
                         priceerror.addClass('d-none');
                         $(this).css('border-color', 'gray');
