@@ -1399,7 +1399,7 @@ def addbulk(request):
     #category=request.POST.get('category')
     myfile=request.FILES[next(iter(request.FILES))]
     retailer=Retailer.objects.get(id=request.user.retailer_user.retailer.id)
-
+    reciept=Itemsbysupplier.objects.create()
     df = pd.read_excel(myfile)
     df = df.fillna('0')
     for d in df.itertuples():
@@ -1421,6 +1421,8 @@ def addbulk(request):
         )
         if d.stock>0:
             StockIn.objects.create(
+                price=d.prixventemag,
+                reciept=reciept,
                 product=product,
                 quantity=d.stock,
             )
