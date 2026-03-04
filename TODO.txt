@@ -20,4 +20,6 @@ devis generer bon or facture
 ability to edit name of product in
 quantity before price in creation bon
 factures in client history
-
+update paymrnt date in client history192
+consommable not show in alert
+qty before price in all bons
