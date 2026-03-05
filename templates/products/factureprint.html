@@ -100,7 +100,7 @@
     </div>-->
 
     <!-- facture items -->
-    <div class="orderitems mt-3 bg-white rounded p-2 position-relative">
+    <div class="orderitems mt-2 bg-white rounded p-2 position-relative">
 
       <table class="table table-bordered fcitems" style="border-color: black;font-family: serif; font-size:13px;">
         <thead style="font-size: 10px;
@@ -122,7 +122,7 @@
                       {% if not forloop.counter == i|length %}<br>{% endif %}
                       {% endfor %}
                     </td>
-                  <td style="height: 160mm;white-space: nowrap;padding-left:3px">
+                  <td style="height: 150mm;white-space: nowrap;padding-left:3px">
                       {% for v in i %}
                         {{v.product.car.upper|slice:"50"}}
                         {% if not forloop.counter == i|length %}<br>{% endif %}
