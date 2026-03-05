@@ -50,7 +50,8 @@
     <hr>
     <div class="d-flex justify-content-between col-9">
         <div>
-          
+          <div>Facture N°: <strong>{{facture.facture_no}}</strong>
+          </div>
           <div>
             Date de facture: <strong>{{facture.date|date:"d/m/Y"}}</strong>
           </div>
@@ -59,8 +60,9 @@
           </div>
         </div>
         <div>
-          <div
-            >Facture N°: <strong>{{facture.facture_no}}</strong>
+          <div>
+            Client : <strong>{{facture.client.customer_name}}</strong>
+            ICE : <strong>{{facture.client.ice}}</strong>
           </div>
 
 
