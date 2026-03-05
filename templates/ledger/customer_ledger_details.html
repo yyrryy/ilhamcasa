@@ -306,8 +306,8 @@
                         {% if i.isfacture %}(FC){% endif %}
                     </td>
                     <td>
-                        <input type="date" name="regldate" class="regledate" value="{{i.date|date:'Y-m-d'}}">
-                        {{i.date|date:"d/m/Y"}}
+                        <input type="date" name="regldate" class="regledate" value="{{i.date|date:'Y-m-d'}}" onchange="editregldate(event, '{{i.id}}')">
+                        
                     </td>
                     <td>{{i.echeance|date:"d/m/Y"}}</td>
                     <td>{{i.mode}}</td>
@@ -425,6 +425,10 @@
 <script src="/static/js/moment.js"></script>
 <script src="/static/js/datepicker.js"></script>
 <script>// serch in tables instead of sending ajax request
+    function editregldate(event, reglid){
+        date=$(event.target).val()
+        console.log("date", date)
+    }
         $(".name_search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 // $(".product_search_result tr").filter(function() {
