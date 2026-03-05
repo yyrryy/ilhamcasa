@@ -1002,7 +1002,7 @@ def lowstock(request):
             # return render(request, 'products/nopermission.html')
             pass
     supplierid=request.POST.get('supplierid')
-    products=Product.objects.filter(stock__lte=F('minstock')).annotate(
+    products=Product.objects.exclude(category__name="consommable").filter(stock__lte=F('minstock')).annotate(
     is_preferred_supplier=Case(
         When(originsupp_id=supplierid, then=Value(True)),
         default=Value(False),
