@@ -31,7 +31,7 @@ def intspace(value):
 
 @register.simple_tag
 def product_notifications(retailer_id):
-    p=Product.objects.filter(retailer__id=retailer_id)
+    p=Product.objects.filter(retailer__id=retailer_id).exclude(category__name="consommable")
     return len([i for i in p if i.stock<=i.minstock])
 
 @register.simple_tag
