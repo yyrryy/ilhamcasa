@@ -1011,7 +1011,7 @@ def lowstock(request):
     cc = Category.objects.filter(
     product__in=products
     ).distinct()
-    targets = Category.objects.filter(parent__isnull=False, product__stock__lte=F('product__minstock')).annotate(
+    targets = Category.objects.exclude(name="consommable").filter(parent__isnull=False, product__stock__lte=F('product__minstock')).annotate(
     total_products=Count('product')
     )
     return render(request, 'products/lowstock.html', {'title':'Rupture Stock', 'categories':targets, 'ids':cc.values_list('id', flat=True),
