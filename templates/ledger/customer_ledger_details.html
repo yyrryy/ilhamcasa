@@ -427,7 +427,10 @@
 <script>// serch in tables instead of sending ajax request
     function editregldate(event, reglid){
         date=$(event.target).val()
-        console.log("date", date)
+        $.get("/products/editregldate", {
+            'reglid':reglid,
+            'date':date
+        })
     }
         $(".name_search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();

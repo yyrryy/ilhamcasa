@@ -11,7 +11,7 @@ from pis_product.logs_view import DailyStockLogs, MonthlyStockLogs
 urlpatterns = [
     # re_path(r'^updateavoirclient/',views.updateavoirclient, name='updateavoirclient'),
     # re_path(r'^updateavoirclient/',views.updateavoirclient, name='updateavoirclient'),
-    # re_path(r'^updateavoirclient/',views.updateavoirclient, name='updateavoirclient'),
+    re_path(r'^editregldate/',views.editregldate, name='editregldate'),
     re_path(r'^generebontofacture/',views.generebontofacture, name='generebontofacture'),
     re_path(r'^listavoircomptoir/',views.listavoircomptoir, name='listavoircomptoir'),
     re_path(r'^updateavoirclient/',views.updateavoirclient, name='updateavoirclient'),

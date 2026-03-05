@@ -4934,3 +4934,14 @@ def generebontofacture(request):
         'bon':bon
     }
     return render(request, 'products/factureview.html', ctx)
+
+def editregldate(request):
+    date=request.GET.get('date')
+    reglid=request.GET.get('reglid')
+    pay=PaymentClient.objects.get(pk=reglid)
+    date=datetime.strptime(date, '%Y-%m-%d')
+    pay.date=date
+    pay.save()
+    return JsonResponse({
+        'success':True
+    })
