@@ -4589,8 +4589,9 @@ def createfacture(request):
         for item in items:
             # add client price:
             product=Product.objects.get(pk=item.get('item_id'))
-            product.stock-=float(item.get('qty'))
-            product.save()
+            if len(bon_number)==0:
+                product.stock-=float(item.get('qty'))
+                product.save()
             Outfacture.objects.create(
                 facture=facture,
                 product=product,

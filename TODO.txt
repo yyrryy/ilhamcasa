@@ -14,12 +14,14 @@ cosommable not sho in inventaire or in stock table..
 facture genere paid if bon paid and client need to show directly..
 prix error in bon must not show..
 show sortie facture in product history..
+consommable not show in alert..
+quantity before price in creation bon..
 add fix in configuration
 add bon command number in field in bon
 devis generer bon or facture
 ability to edit name of product in
-quantity before price in creation bon
+quantity before price in creation devis
+quantity before price in creation facture
 factures in client history
 update paymrnt date in client history192
-consommable not show in alert
-qty before price in all bons
+stock 
