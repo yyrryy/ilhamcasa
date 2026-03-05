@@ -23,5 +23,7 @@ ability to edit name of product in
 quantity before price in creation devis
 quantity before price in creation facture
 factures in client history
+factures in supplier history
+
 update paymrnt date in client history192
 
