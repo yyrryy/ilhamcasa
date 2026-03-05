@@ -1953,6 +1953,10 @@ def producthistory(request, id):
             'rest':float(totalin)-float(stockout.aggregate(Sum('quantity')).get('quantity__sum')),
             # 'percentage':round(float(stockout.aggregate(Sum('quantity')).get('quantity__sum'))*100/float(totalin)),
         })
+    if factureout:
+        ctx.update({
+            'factureout':factureout,
+        })
     else:
         ctx.update({
             'netprofit':-float(totalcost)
