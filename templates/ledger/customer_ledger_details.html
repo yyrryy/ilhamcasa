@@ -305,7 +305,10 @@
                     <td>
                         {% if i.isfacture %}(FC){% endif %}
                     </td>
-                    <td> {{i.date|date:"d/m/Y"}}</td>
+                    <td>
+                        <input type="date" name="regldate" class="regledate" value="{{i.date|date:'Y-m-d'}}">
+                        {{i.date|date:"d/m/Y"}}
+                    </td>
                     <td>{{i.echeance|date:"d/m/Y"}}</td>
                     <td>{{i.mode}}</td>
                     <td>{{i.amount|floatformat:2}} DH

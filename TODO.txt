@@ -24,4 +24,4 @@ quantity before price in creation devis
 quantity before price in creation facture
 factures in client history
 update paymrnt date in client history192
-stock 
+
