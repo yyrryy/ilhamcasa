@@ -231,6 +231,7 @@ class CustomerLedgerDetailsView(TemplateView):
         totalcredit=(avoirs.aggregate(Sum('grand_total')).get('grand_total__sum') or 0)+(payments.aggregate(Sum('amount')).get('amount__sum') or 0)
         sold=float(totalbons)-float(totalcredit)
         factures=Facture.totalclient(customer=customer)
+        listfactures=Facture.objects.filter(client=customer)
         avoirsfc=Avoir.totalclientfc(customer=customer)
         #avances+=SalesHistory.totalclientavance(customer=customer)
         reglementsfc=PaymentClient.totalclientfc(customer=customer)
@@ -239,6 +240,7 @@ class CustomerLedgerDetailsView(TemplateView):
             'sold':sold,
             'soldfc':soldfc,
             'customer': customer,
+            'factures': listfactures,
             'ledgers': ledgers.order_by('-dated'),
             'ledger_total': '%g' % ledger_total,
             'total_payments': total_payments,
