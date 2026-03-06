@@ -103,6 +103,7 @@ class Customer(models.Model):
         totalcredit=(avoirs.aggregate(Sum('grand_total')).get('grand_total__sum') or 0)+(payments.aggregate(Sum('amount')).get('amount__sum') or 0)
         totalbons=bons.aggregate(Sum('grand_total')).get('grand_total__sum') or 0
         totalfactures=factures.aggregate(Sum('total')).get('total__sum') or 0
+        print("totalbon":totalbons, "totalfactures":totalfactures, "totalcredit":totalcredit)
         return float(totalbons)+float(totalfactures)-float(totalcredit)
 
 
