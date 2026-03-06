@@ -97,7 +97,7 @@ class Customer(models.Model):
         from pis_sales.models import SalesHistory
         from pis_product.models import Avoir, PaymentClient, Facture
         bons = SalesHistory.objects.filter(customer=self)
-        factures = Facture.objects.filter(client=self)
+        factures = Facture.objects.filter(client=self, bon__isnull=True)
         avoirs = Avoir.objects.filter(customer=self)
         payments=PaymentClient.objects.filter(client=self)
         totalcredit=(avoirs.aggregate(Sum('grand_total')).get('grand_total__sum') or 0)+(payments.aggregate(Sum('amount')).get('amount__sum') or 0)
