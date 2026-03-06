@@ -25,5 +25,5 @@ quantity before price in creation facture
 factures in client history
 factures in supplier history
 addd note in bon
-update paymrnt date in client history192
+update paymrnt date in client history
 

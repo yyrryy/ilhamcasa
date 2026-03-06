@@ -219,14 +219,14 @@ class CustomerLedgerDetailsView(TemplateView):
         #     payment_total = 0
         total_transactions = SalesHistory.objects.filter(customer=customer).aggregate(Sum('grand_total'))
         total_transactions = float(total_transactions.get('grand_total__sum') or 0)
-        total_payments = PaymentClient.objects.filter(client=customer, isfacture=False).aggregate(Sum('amount'))
+        total_payments = PaymentClient.objects.filter(client=customer).aggregate(Sum('amount'))
         total_payments = float(total_payments.get('amount__sum') or 0)
         total_avoirs = Avoir.objects.filter(customer=customer).aggregate(Sum('grand_total')).get('grand_total__sum') or 0
-        clientpayments=PaymentClient.objects.filter(client=customer, isfacture=False)
+        clientpayments=PaymentClient.objects.filter(client=customer)
         bons = SalesHistory.objects.filter(customer=customer)
         paid_amount=bons.aggregate(Sum('paid_amount')).get('paid_amount__sum') or 0
         avoirs = Avoir.objects.filter(customer=customer)
-        payments=PaymentClient.objects.filter(client=customer, isfacture=False)
+        payments=PaymentClient.objects.filter(client=customer)
         totalbons=bons.aggregate(Sum('grand_total')).get('grand_total__sum') or 0
         totalcredit=(avoirs.aggregate(Sum('grand_total')).get('grand_total__sum') or 0)+(payments.aggregate(Sum('amount')).get('amount__sum') or 0)
         sold=float(totalbons)-float(totalcredit)
