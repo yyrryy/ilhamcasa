@@ -3784,7 +3784,7 @@ def addcategoryajax(request):
     print('>> not exist create, create it')
     # create the category
     parent = Category.objects.get(name="products")
-    category=Category.objects.create(name=category, parent_id=parent)
+    category=Category.objects.create(name=category, parent=parent)
     return JsonResponse({
         'success':True,
         'id':category.id,
