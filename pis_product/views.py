@@ -1846,7 +1846,7 @@ def updateproduct(request, id):
                 'pdctid':id,
                 'ref':product.ref,
                 'catergory':product.category.name,
-                'mark':product.mark.name,
+                #'mark':product.mark.name,
                 'car':product.car,
                 #'supp':product.originsupp.name,
                 'prachat':product.pr_achat,
