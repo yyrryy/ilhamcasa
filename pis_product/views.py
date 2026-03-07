@@ -1809,8 +1809,8 @@ def updateproduct(request, id):
                 'error': 'Ref already exist in this Category'
             })
         else:
-            mark = Mark.objects.get(pk=request.POST.get('updatemark'))
-            print('ref', ref, 'car', car, 'minstock', minstock, 'category', category, 'mark', mark)
+           # mark = Mark.objects.get(pk=request.POST.get('updatemark'))
+           # print('ref', ref, 'car', car, 'minstock', minstock, 'category', category, 'mark', mark)
             #originsupp =Supplier.objects.get(pk=request.POST.get('updateoriginsupp'))
             #prnet=round(float(prachat)-(float(prachat)*float(remise)/100), 2) if prachat != 0 else 0
 
@@ -1822,7 +1822,7 @@ def updateproduct(request, id):
             product.price2=price2
             product.car=car
             product.minstock=minstock
-            product.mark=mark
+            #product.mark=mark
             product.category=category
             #product.remise=remise
             #product.prnet=prnet
