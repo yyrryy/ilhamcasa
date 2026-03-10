@@ -93,6 +93,11 @@
                     <input type="date" name="datebon" placeholder="Date" value="{{present_date|date:'Y-m-d'}}" class="form-control datebon">
                     <!-- <input type="time" name="timebon" placeholder="Date" value="{{present_date|date:'H:i'}}" class="form-control timebon"> -->
                 </div>
+                <div class="mt-2">
+                    <!-- note -->
+                    <small>Note</small>
+                    <textarea name="note" class="form-control note" placeholder="Note"></textarea>
+                </div>
             </div>
             <div class="rounded p-2">
             </div>
@@ -704,6 +709,7 @@
                 var datebon=$('[name="datebon"]').val()
                 var timebon=$('[name="timebon"]').val()
                 var customer_value = $('.customer').val();
+                var note = $('.note').val();
                 var customer_id = $('select[name="customer"]').val();
 
                 const itemIds = items.map(item => item.item_id);
@@ -724,6 +730,7 @@
                         echeance: echeance,
                         amount: amount,
                         datebon:datebon,
+                        note:note,
                         timebon:timebon,
                         customer_id: customer_id,
                         sub_total: sub_total,

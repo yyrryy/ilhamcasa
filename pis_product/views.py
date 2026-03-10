@@ -3916,7 +3916,7 @@ def bonprint(request, id):
     orderitems=PurchasedProduct.objects.filter(invoice=order)
     # split the orderitems into chunks of 10 items
     orderitems=list(orderitems)
-    orderitems=[orderitems[i:i+37] for i in range(0, len(orderitems), 37)]
+    # orderitems=[orderitems[i:i+37] for i in range(0, len(orderitems), 37)]
     tva=round(float(order.grand_total)-(float(order.grand_total)/1.2), 2)
     payments=round(PaymentClient.objects.filter(bon=order).aggregate(Sum('amount')).get('amount__sum') or 0, 2)
     #text neartotalweather it's avance or paid
@@ -3943,7 +3943,7 @@ def bonprint(request, id):
     ctx={
         'text':text,
         'title':f'bon {order.receipt_no}',
-        'facture':order,
+        'bon':order,
         'orderitems':orderitems,
         'tva':tva,
         'ttc':order.grand_total,

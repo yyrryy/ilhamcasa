@@ -19,6 +19,9 @@ class SalesHistory(DatedModel):
     receipt_no = models.CharField(
         max_length=20, unique=True, blank=True, null=True
     )
+    note = models.CharField(
+        max_length=900, blank=True, null=True, default=""
+    )
     datebon= models.DateTimeField(default=None, blank=True, null=True)
     customer = models.ForeignKey(
         'pis_com.Customer',

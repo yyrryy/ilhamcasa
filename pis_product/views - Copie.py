@@ -3408,11 +3408,12 @@ def bonprint(request, id):
     orderitems=PurchasedProduct.objects.filter(invoice=order)
     # split the orderitems into chunks of 10 items
     orderitems=list(orderitems)
-    orderitems=[orderitems[i:i+37] for i in range(0, len(orderitems), 37)]
+    orderitems=[orderitems[i:i+20] for i in range(0, len(orderitems), 20)]
     tva=round(float(order.grand_total)-(float(order.grand_total)/1.2), 2)
+    print("Rrr")
     ctx={
         'title':f'bon {order.receipt_no}',
-        'facture':order,
+        'bon':order,
         'orderitems':orderitems,
         'tva':tva,
         'ttc':order.grand_total,

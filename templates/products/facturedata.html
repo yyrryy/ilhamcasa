@@ -146,13 +146,19 @@
         </div>
     </div>
 {% if not avoir %}
+
 {% if facture.paid_amount > 0 %}
     <h1 class="bg-dark p-2 rounded text-white">
         Mantant Payé: {{facture.paid_amount}}
     </h1>
+{%elif facture.ispaid%}
+    <h1 class="bg-dark p-2 rounded text-white">
+        Facture Payé
+    </h1>
+    
 {% endif %}
 </div>
-{% if not facture.paid_amount >= facture.total %}
+{% if not facture.ispaid %}
 <div class="mt-5 rounded bg-white row">
     <strong> ajouter payment</strong><br>
     <div class="col-3">

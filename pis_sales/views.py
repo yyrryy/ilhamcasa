@@ -430,6 +430,7 @@ class GenerateInvoiceAPIView(View):
         discount = self.request.POST.get('discount')
         shipping = self.request.POST.get('shipping')
         grand_total = self.request.POST.get('grand_total')
+        note = self.request.POST.get('note')
         totalQty = self.request.POST.get('totalQty')
         remaining_payment = self.request.POST.get('remaining_amount')
         amount = self.request.POST.get('amount') or 0
@@ -456,6 +457,7 @@ class GenerateInvoiceAPIView(View):
                 'datebon':datebon,
                 'discount': discount,
                 'grand_total': grand_total,
+                'note': note,
                 'total_quantity': totalQty,
                 'shipping': shipping,
                 'paid_amount': amount,
