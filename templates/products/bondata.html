@@ -17,10 +17,10 @@
     <button type="button" class="btn btn-primary me-3" onclick="printbon('{{bon.id}}')">
         Bon
     </button>
-    {% if not bon.generatedtofature%}
     <a href="{% if bon.customer %}/sales/update/{{bon.id}}/api/{% else %}/product/modifierboncomptoir/{{bon.id}}{% endif%}" type="button" class="btn btn-primary me-3">
         Modifier
     </a>
+    {% if not bon.generatedtofature%}
     <button onclick="generebontofacture({{bon.id}})" type="button" class="btn btn-primary">
         Generer Factuer
     </button>

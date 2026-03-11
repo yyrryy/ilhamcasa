@@ -439,6 +439,8 @@ class Supplierprice(models.Model):
     price=models.FloatField(default=0.00, blank=True, null=True)
     qty=models.IntegerField(default=0, blank=True, null=True)
     remise=models.IntegerField(default=0, blank=True, null=True)
+    # def sold(self):
+        
 class Devis(models.Model):
     client=models.ForeignKey(
         'pis_com.Customer', related_name='clientdevis',

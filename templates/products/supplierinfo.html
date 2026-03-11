@@ -59,7 +59,7 @@
                 </tr>
                 <tr>
                   <th>Rest</th>
-                  <th>{{sold|floatformat:2 }} DH</th>
+                  <th>{{supplier.sold|floatformat:2 }} DH</th>
                 </tr>
 		 <!-- <tr>
                     <th>Inventaire</th>
@@ -152,6 +152,7 @@
             <button class="btn switcher btn-dark" onclick="$('.switcher').removeClass('btn-dark'), $(this).addClass('btn-dark'), $('.toshow').hide(), $('.bons').show()">bons</button>
             <button class="btn switcher" onclick="$('.switcher').removeClass('btn-dark'), $(this).addClass('btn-dark'), $('.toshow').hide(), $('.reglements').show()">Reglements</button>
             <button class="btn switcher" onclick="$('.switcher').removeClass('btn-dark'), $(this).addClass('btn-dark'), $('.toshow').hide(), $('.avoirs').show()">Avoirs</button>
+            <button class="btn switcher" onclick="$('.switcher').removeClass('btn-dark'), $(this).addClass('btn-dark'), $('.toshow').hide(), $('.factures').show()">Factures</button>
         </div>
         <!-- bons -->
         <div class="bons toshow">
@@ -263,6 +264,40 @@
                 </table>
             </div>
         </div>
+
+        <!-- factures -->
+        <div class="factures toshow" style="display: none;">
+            <div class="bg-white rounded shadow p-2">
+                <div class="p-2 d-flex justify-content-between align-items-center">
+                    <h4>Les factures</h4>
+                    <strong>
+                        {{navoirs}}
+                    </strong>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <th>Date</th>
+                        <th>N facture</th>
+                        <th>Total</th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        {% for i in factures %}
+                        <tr>
+                            <td>{{i.date|date:'d/m/Y'}}</td>
+                            <td>{{i.nbon|floatformat:2}}</td>
+                            <td>{{i.total|floatformat:2}}</td>
+                            <!-- <td>
+                                {{i.items}}
+                            </td> -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        
     </div>
 </div>
 <div class="mt-2">

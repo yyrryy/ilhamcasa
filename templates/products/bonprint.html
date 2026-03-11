@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Facture - SAS AUTO</title>
+<title>Bon - SAS AUTO</title>
 
 <!-- Tailwind CDN (for demonstration; production should compile JIT build) -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -24,243 +24,371 @@ page-break-after: always;
 </head>
 
 <body class="bg-gray-200 font-sans text-gray-900">
+{% for items in orderitems %}
+    {% if forloop.counter == orderitems|length %}
+    <!-- last iteration -->
+    <main class="max-w-5xl mx-auto bg-gray-100 border border-gray-500 p-10 my-10">
 
-<main class="max-w-5xl mx-auto bg-gray-100 border border-gray-500 p-10 my-10">
+        <!-- Top gold bar -->
+        <div class="h-3 bg-[#d4a017] mb-8"></div>
 
-<!-- Top gold bar -->
-<div class="h-3 bg-[#d4a017] mb-8"></div>
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
-<header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <!-- Logo -->
+            <div class="w-64">
+            <img 
+            src="{%if user.retailer_user.retailer.logo%}{{user.retailer_user.retailer.logo.url}}{%endif%}"
+            alt="Logo SAS AUTO - Service Automobile Spécialisé"
+            class="w-full h-auto"
+            loading="lazy"
+            />
+            <!-- Logo placeholder due to unknown licensing in source PDF -->
+            </div>
 
-<!-- Logo -->
-<div class="w-64">
-<img 
-src="{%if user.retailer_user.retailer.logo%}{{user.retailer_user.retailer.logo.url}}{%endif%}"
-alt="Logo SAS AUTO - Service Automobile Spécialisé"
-class="w-full h-auto"
-loading="lazy"
-/>
-<!-- Logo placeholder due to unknown licensing in source PDF -->
-</div>
+            <h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
+            BON
+            </h1>
 
-<h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
-BON
-</h1>
+        </header>
 
-</header>
+        <hr class="my-6 border-gray-400">
 
-<hr class="my-6 border-gray-400">
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-<section class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <!-- Left meta -->
+            <div>
+                <ul class="text-sm space-y-1">
+                    <li><strong>Date de bon :</strong>{{bon.datebon|date:"d/m/Y"}}</li>
+                    <li><strong>N° de BC :</strong> {{bon.boncommande}}</li>
+                    <!-- <li><strong>N° de BL :</strong> {{bon.receipt_no}}</li> -->
+                </ul>
 
-<!-- Left meta -->
-<div>
-<ul class="text-sm space-y-1">
-<li><strong>Date de bon :</strong>{{bon.datebon|date:"d/m/Y"}}</li>
-<li><strong>N° de BC :</strong> {{bon.boncommande}}</li>
-<li><strong>N° de BL :</strong> {{bon.receipt_no}}</li>
-</ul>
+                <div class="mt-6 text-sm leading-relaxed">
 
-<div class="mt-6 text-sm leading-relaxed">
+                    <p class="font-semibold">SAS AUTO</p>
 
-<p class="font-semibold">SAS AUTO</p>
+                    <p>
+                    5 BD ABDELLAH BEN YASSINE<br>
+                    IMM BELLEDONNE ETAGE 5 N°5<br>
+                    CASABLANCA
+                    </p>
 
-<p>
-5 BD ABDELLAH BEN YASSINE<br>
-IMM BELLEDONNE ETAGE 5 N°5<br>
-CASABLANCA
-</p>
+                    <p class="mt-2">
+                    Faris.sasauto@gmail.com
+                    </p>
 
-<p class="mt-2">
-Faris.sasauto@gmail.com
-</p>
+                    <p>
+                    0660638487 / 0633151635
+                    </p>
 
-<p>
-0660638487 / 0633151635
-</p>
+                </div>
 
-</div>
+            </div>
 
-</div>
+            <!-- Right meta -->
+            <div class="text-sm">
 
-<!-- Right meta -->
-<div class="text-sm">
+                <p class="text-xl font-semibold mb-4">
+                Bon N° : {{bon.receipt_no}}
+                </p>
 
-<p class="text-xl font-semibold mb-4">
-Facture N° :
-</p>
+                <ul class="space-y-1">
+                    <li>Client: {{bon.customer.customer_name}}</li>
+                    <li>Note: {{bon.note}}</li>
+                    <!-- <li>#N/A</li>
+                    <li>#N/A</li>
+                    <li>#N/A</li> -->
+                </ul>
 
-<ul class="space-y-1">
-<li>#N/A</li>
-<li>#N/A</li>
-<li>#N/A</li>
-<li>#N/A</li>
-</ul>
+            </div>
 
-</div>
+        </section>
 
-</section>
+        <!-- Table -->
+        <section class="mt-10">
+            <table class="w-full border-collapse text-sm table-striped">
 
-<!-- Table -->
-<section class="mt-10">
-<table class="w-full border-collapse text-sm">
+                <thead>
+                    <tr class="bg-[#d4a017] text-white text-left">
+                    <th class="p-2">Produit</th>
+                    <th class="p-2">Designation</th>
+                    <th class="p-2">Quantité</th>
+                    <!-- <th class="p-2">Unité</th> -->
+                    <th class="p-2">Prix HT</th>
+                    <th class="p-2">Total HT</th>
+                    </tr>
+                </thead>
 
-<thead>
-<tr class="bg-[#d4a017] text-white text-left">
-<th class="p-2">Produit</th>
-<th class="p-2">Designation</th>
-<th class="p-2">Quantité</th>
-<!-- <th class="p-2">Unité</th> -->
-<th class="p-2">Prix HT</th>
-<th class="p-2">Total HT</th>
-</tr>
-</thead>
+                <tbody class="divide-y">
 
-<tbody class="divide-y">
+                    <!-- Repeated rows matching PDF -->
+                    <tr class="">
+                    <td>
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.product.car}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.quantity}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.price}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <!-- <td>
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
+                    </td> -->
+                    <td class="font-semibold">
+                        {% for i in items %}
+                        {{i.purchase_amount}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                </tr>
 
-<!-- Repeated rows matching PDF -->
-{% for i in orderitems %}
-<tr class="bg-gray-200">
-<td class="p-2">{{i.product.ref}}</td>
-<td>{{i.product.car}}</td>
-<td>{{i.quantity}}</td>
-<td>{{i.price}}</td>
-<!-- <td>{{i.product.ref}}</td> -->
-<td class="font-semibold">{{i.purchase_amount}}</td>
-</tr>
-{% endfor %}
-<tr class="bg-gray-300">
-<td class="p-2">#jjlkjlk/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td class="font-semibold">#N/A</td>
-</tr>
 
-<tr class="bg-gray-200">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+                </tbody>
 
-<tr class="bg-gray-300">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+            </table>
 
-<tr class="bg-gray-200">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+        </section>
 
-<tr class="bg-gray-300">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+        <!-- Totals -->
+        <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
 
-<tr class="bg-gray-200">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+            <div class="text-sm">
 
-<tr class="bg-gray-300">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+            <!-- <p class="font-semibold">
+            ARRETE LA PRESENTE FACTURE A LA SOMME DE :
+            </p>
 
-</tbody>
+            <p class="mt-2">
+            Dirhams.
+            </p> -->
 
-</table>
+            <div class="border-b border-dashed border-gray-400 mt-3"></div>
 
-</section>
+            </div>
 
-<!-- Totals -->
-<section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="text-sm max-w-xs ml-auto">
 
-<div class="text-sm">
 
-<p class="font-semibold">
-ARRETE LA PRESENTE FACTURE A LA SOMME DE :
-</p>
 
-<p class="mt-2">
-Dirhams.
-</p>
 
-<div class="border-b border-dashed border-gray-400 mt-3"></div>
+            <div class="flex justify-between items-center border mt-2">
+            <span class="bg-[#d4a017] text-white px-3 py-1 font-semibold">
+            LE TOTAL : 
+            </span>
 
-</div>
+            <span class="px-4 font-bold">
+            {{bon.grand_total}}
+            </span>
 
-<div class="text-sm max-w-xs ml-auto">
+            </div>
 
-<div class="flex justify-between py-1">
-<span>LE TOTAL HT :</span>
-<span>#N/A</span>
-</div>
+            </div>
 
-<div class="flex justify-between py-1">
-<span>TVA 20% :</span>
-<span>#N/A</span>
-</div>
+        </section>
 
-<div class="flex justify-between items-center border mt-2">
-<span class="bg-[#d4a017] text-white px-3 py-1 font-semibold">
-LE TOTAL TTC :
-</span>
+        <footer class="text-center text-xs mt-12 border-t pt-4">
 
-<span class="px-4 font-bold">
-#N/A
-</span>
+            <p>
+            SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088
+            </p>
 
-</div>
+            <p>
+            5 BD ABDELLAH BEN YASSINE IMM BELLEDONNE ETAGE 5 N°5, CASABLANCA
+            </p>
 
-</div>
+            <p>
+            E-mail: Faris.sasauto@gmail.com -- Tel : 0660638487 / 0633151635
+            </p>
 
-</section>
+        </footer>
 
-<footer class="text-center text-xs mt-12 border-t pt-4">
+        <div class="h-3 bg-[#d4a017] mt-10"></div>
 
-<p>
-SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088
-</p>
+    </main>
 
-<p>
-5 BD ABDELLAH BEN YASSINE IMM BELLEDONNE ETAGE 5 N°5, CASABLANCA
-</p>
+    {% else %}
+    <main class="max-w-5xl mx-auto bg-gray-100 border border-gray-500 p-10 my-10">
 
-<p>
-E-mail: Faris.sasauto@gmail.com -- Tel : 0660638487 / 0633151635
-</p>
+        <!-- Top gold bar -->
+        <div class="h-3 bg-[#d4a017] mb-8"></div>
 
-</footer>
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
-<div class="h-3 bg-[#d4a017] mt-10"></div>
+            <!-- Logo -->
+            <div class="w-64">
+            <img 
+            src="{%if user.retailer_user.retailer.logo%}{{user.retailer_user.retailer.logo.url}}{%endif%}"
+            alt="Logo SAS AUTO - Service Automobile Spécialisé"
+            class="w-full h-auto"
+            loading="lazy"
+            />
+            <!-- Logo placeholder due to unknown licensing in source PDF -->
+            </div>
 
-</main>
+            <h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
+            BON
+            </h1>
 
+        </header>
+
+        <hr class="my-6 border-gray-400">
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+            <!-- Left meta -->
+            <div>
+                <ul class="text-sm space-y-1">
+                    <li><strong>Date de bon :</strong>{{bon.datebon|date:"d/m/Y"}}</li>
+                    <li><strong>N° de BC :</strong> {{bon.boncommande}}</li>
+                    <!-- <li><strong>N° de BL :</strong> {{bon.receipt_no}}</li> -->
+                </ul>
+
+                <div class="mt-6 text-sm leading-relaxed">
+
+                    <p class="font-semibold">SAS AUTO</p>
+
+                    <p>
+                    5 BD ABDELLAH BEN YASSINE<br>
+                    IMM BELLEDONNE ETAGE 5 N°5<br>
+                    CASABLANCA
+                    </p>
+
+                    <p class="mt-2">
+                    Faris.sasauto@gmail.com
+                    </p>
+
+                    <p>
+                    0660638487 / 0633151635
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Right meta -->
+            <div class="text-sm">
+
+                <p class="text-xl font-semibold mb-4">
+                Bon N° : {{bon.receipt_no}}
+                </p>
+
+                <ul class="space-y-1">
+                    <li>Client: {{bon.customer.customer_name}}</li>
+                    <!-- <li>#N/A</li>
+                    <li>#N/A</li>
+                    <li>#N/A</li> -->
+                </ul>
+
+            </div>
+
+        </section>
+
+        <!-- Table -->
+        <section class="mt-10">
+            <table class="w-full border-collapse text-sm table-striped">
+
+                <thead>
+                    <tr class="bg-[#d4a017] text-white text-left">
+                    <th class="p-2">Produit</th>
+                    <th class="p-2">Designation</th>
+                    <th class="p-2">Quantité</th>
+                    <!-- <th class="p-2">Unité</th> -->
+                    <th class="p-2">Prix HT</th>
+                    <th class="p-2">Total HT</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y">
+
+                    <!-- Repeated rows matching PDF -->
+                    <tr class="">
+                    <td>
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.product.car}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.quantity}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.price}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <!-- <td>
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
+                    </td> -->
+                    <td class="font-semibold">
+                        {% for i in items %}
+                        {{i.purchase_amount}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+        <!-- Totals -->
+        
+
+        <footer class="text-center text-xs mt-12 border-t pt-4">
+
+            <p>
+            SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088
+            </p>
+
+            <p>
+            5 BD ABDELLAH BEN YASSINE IMM BELLEDONNE ETAGE 5 N°5, CASABLANCA
+            </p>
+
+            <p>
+            E-mail: Faris.sasauto@gmail.com -- Tel : 0660638487 / 0633151635
+            </p>
+
+        </footer>
+
+        <div class="h-3 bg-[#d4a017] mt-10"></div>
+
+    </main>
+    {%endif%}
+{%endfor%}
 </body>
 </html>

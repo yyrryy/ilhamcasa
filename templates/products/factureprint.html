@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Facture - SAS AUTO</title>
 
 <!-- Tailwind CDN (for demonstration; production should compile JIT build) -->
-<script src="https://cdn.tailwindcss.com"></script>
+<script src="/static/js/jquery.min.1.9.1.js"></script>
+<script src="/static/css/tailwind.css"></script>
+<script src="/static/js/spellingnumbers.js"></script>
 
 <!--
 Font substitution due to unknown licensing in source PDF.
@@ -24,244 +25,387 @@ page-break-after: always;
 </head>
 
 <body class="bg-gray-200 font-sans text-gray-900">
+{% for items in orderitems %}
+    {% if forloop.counter == orderitems|length %}
+    <!-- last iteration -->
+    <main class="max-w-5xl mx-auto bg-gray-100 border border-gray-500 p-10 my-10">
 
-<main class="max-w-5xl mx-auto bg-gray-100 border border-gray-500 p-10 my-10">
+        <!-- Top gold bar -->
+        <div class="h-3 bg-[#d4a017] mb-8"></div>
 
-<!-- Top gold bar -->
-<div class="h-3 bg-[#d4a017] mb-8"></div>
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
-<header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <!-- Logo -->
+            <div class="w-64">
+            <img 
+            src="{%if user.retailer_user.retailer.logo%}{{user.retailer_user.retailer.logo.url}}{%endif%}"
+            alt="Logo SAS AUTO - Service Automobile Spécialisé"
+            class="w-full h-auto"
+            loading="lazy"
+            />
+            <!-- Logo placeholder due to unknown licensing in source PDF -->
+            </div>
 
-<!-- Logo -->
-<div class="w-64">
-<img 
-src="logo-placeholder.png" 
-alt="Logo SAS AUTO - Service Automobile Spécialisé"
-class="w-full h-auto"
-loading="lazy"
-/>
-<!-- Logo placeholder due to unknown licensing in source PDF -->
-</div>
+            <h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
+            Facture
+            </h1>
 
-<h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
-FACTURE
-</h1>
+        </header>
 
-</header>
+        <hr class="my-6 border-gray-400">
 
-<hr class="my-6 border-gray-400">
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-<section class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <!-- Left meta -->
+            <div>
+                <ul class="text-sm space-y-1">
+                    <li><strong>Date de facture :</strong>{{facture.date|date:"d/m/Y"}}</li>
+                    <li><strong>N° de BC :</strong> {{facture.boncommande}}</li>
+                    <li><strong>N° de BL :</strong> {{facture.bon.receipt_no}}</li>
+                </ul>
 
-<!-- Left meta -->
-<div>
+                <div class="mt-6 text-sm leading-relaxed">
 
-<ul class="text-sm space-y-1">
-<li><strong>Date de facture :</strong> #N/A</li>
-<li><strong>N° de BC :</strong> #N/A</li>
-<li><strong>N° de BL :</strong> #N/A</li>
-</ul>
+                    <p class="font-semibold">SAS AUTO</p>
 
-<div class="mt-6 text-sm leading-relaxed">
+                    <p>
+                    5 BD ABDELLAH BEN YASSINE<br>
+                    IMM BELLEDONNE ETAGE 5 N°5<br>
+                    CASABLANCA
+                    </p>
 
-<p class="font-semibold">SAS AUTO</p>
+                    <p class="mt-2">
+                    Faris.sasauto@gmail.com
+                    </p>
 
-<p>
-5 BD ABDELLAH BEN YASSINE<br>
-IMM BELLEDONNE ETAGE 5 N°5<br>
-CASABLANCA
-</p>
+                    <p>
+                    0660638487 / 0633151635
+                    </p>
 
-<p class="mt-2">
-Faris.sasauto@gmail.com
-</p>
+                </div>
 
-<p>
-0660638487 / 0633151635
-</p>
+            </div>
 
-</div>
+            <!-- Right meta -->
+            <div class="text-sm">
 
-</div>
+                <p class="text-xl font-semibold mb-4">
+                Facture N° : {{facture.facture_no}}
+                </p>
 
-<!-- Right meta -->
-<div class="text-sm">
+                <ul class="space-y-1">
+                    <li>Client: {{facture.client.customer_name}}</li>
+                    <li>ICE: {{facture.client.ice}}</li>
+                    <li>ADDRESS: {{facture.client.address}}</li>
+                    <!-- <li>#N/A</li>
+                    <li>#N/A</li>
+                    <li>#N/A</li> -->
+                </ul>
 
-<p class="text-xl font-semibold mb-4">
-Facture N° :
-</p>
+            </div>
 
-<ul class="space-y-1">
-<li>#N/A</li>
-<li>#N/A</li>
-<li>#N/A</li>
-<li>#N/A</li>
-</ul>
+        </section>
 
-</div>
+        <!-- Table -->
+        <section class="mt-10">
+            <table class="w-full border-collapse text-sm table-striped">
 
-</section>
+                <thead>
+                    <tr class="bg-[#d4a017] text-white text-left">
+                    <th class="p-2">Produit</th>
+                    <th class="p-2">Designation</th>
+                    <th class="p-2">Quantité</th>
+                    <!-- <th class="p-2">Unité</th> -->
+                    <th class="p-2">Prix TTC</th>
+                    <th class="p-2">Total TTC</th>
+                    </tr>
+                </thead>
 
-<!-- Table -->
-<section class="mt-10">
+                <tbody class="divide-y">
 
-<table class="w-full border-collapse text-sm">
+                    <!-- Repeated rows matching PDF -->
+                    <tr class="">
+                    <td>
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.product.car}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.qty}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.price}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <!-- <td>
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
+                    </td> -->
+                    <td class="font-semibold">
+                        {% for i in items %}
+                        {{i.total}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                </tr>
 
-<thead>
-<tr class="bg-[#d4a017] text-white text-left">
-<th class="p-2">Produit</th>
-<th class="p-2">Designation</th>
-<th class="p-2">Quantité</th>
-<th class="p-2">Unité</th>
-<th class="p-2">Prix HT</th>
-<th class="p-2">Total HT</th>
-</tr>
-</thead>
 
-<tbody class="divide-y">
+                </tbody>
 
-<!-- Repeated rows matching PDF -->
-<tr class="bg-gray-200">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td class="font-semibold">#N/A</td>
-</tr>
+            </table>
 
-<tr class="bg-gray-300">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td class="font-semibold">#N/A</td>
-</tr>
+        </section>
 
-<tr class="bg-gray-200">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+        <!-- Totals -->
+        <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
 
-<tr class="bg-gray-300">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+            <div class="text-sm">
 
-<tr class="bg-gray-200">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+            <p class="font-semibold">
+            ARRETE LA PRESENTE FACTURE A LA SOMME DE :
+            </p>
 
-<tr class="bg-gray-300">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+            <strong class="frenchword capitalize"></strong>
 
-<tr class="bg-gray-200">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+            <div class="border-b border-dashed border-gray-400 mt-3"></div>
 
-<tr class="bg-gray-300">
-<td class="p-2">#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-<td>#N/A</td>
-</tr>
+            </div>
 
-</tbody>
+            <div class="text-sm max-w-xs ml-auto">
 
-</table>
+            <div class="flex justify-between py-1">
+            <span>LE TOTAL HT :</span>
+            <span>{{facture.ht}}</span>
+            </div>
 
-</section>
+            <div class="flex justify-between py-1">
+            <span>TVA 20% :</span>
+            <span>{{facture.tva}}</span>
+            </div>
 
-<!-- Totals -->
-<section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="flex justify-between items-center border mt-2">
+            <span class="bg-[#d4a017] text-white px-3 py-1 font-semibold">
+            LE TOTAL TTC :
+            </span>
 
-<div class="text-sm">
+            <span class="px-4 font-bold">
+            {{facture.total}}
+            </span>
 
-<p class="font-semibold">
-ARRETE LA PRESENTE FACTURE A LA SOMME DE :
-</p>
+            </div>
 
-<p class="mt-2">
-Dirhams.
-</p>
+            </div>
 
-<div class="border-b border-dashed border-gray-400 mt-3"></div>
+            </section>
 
-</div>
+        <footer class="text-center text-xs mt-12 border-t pt-4">
 
-<div class="text-sm max-w-xs ml-auto">
+            <p>
+            SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088
+            </p>
 
-<div class="flex justify-between py-1">
-<span>LE TOTAL HT :</span>
-<span>#N/A</span>
-</div>
+            <p>
+            5 BD ABDELLAH BEN YASSINE IMM BELLEDONNE ETAGE 5 N°5, CASABLANCA
+            </p>
 
-<div class="flex justify-between py-1">
-<span>TVA 20% :</span>
-<span>#N/A</span>
-</div>
+            <p>
+            E-mail: Faris.sasauto@gmail.com -- Tel : 0660638487 / 0633151635
+            </p>
 
-<div class="flex justify-between items-center border mt-2">
-<span class="bg-[#d4a017] text-white px-3 py-1 font-semibold">
-LE TOTAL TTC :
-</span>
+        </footer>
 
-<span class="px-4 font-bold">
-#N/A
-</span>
+        <div class="h-3 bg-[#d4a017] mt-10"></div>
 
-</div>
+    </main>
 
-</div>
+    {% else %}
+    <main class="max-w-5xl mx-auto bg-gray-100 border border-gray-500 p-10 my-10">
 
-</section>
+        <!-- Top gold bar -->
+        <div class="h-3 bg-[#d4a017] mb-8"></div>
 
-<footer class="text-center text-xs mt-12 border-t pt-4">
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
-<p>
-SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088
-</p>
+            <!-- Logo -->
+            <div class="w-64">
+            <img 
+            src="{%if user.retailer_user.retailer.logo%}{{user.retailer_user.retailer.logo.url}}{%endif%}"
+            alt="Logo SAS AUTO - Service Automobile Spécialisé"
+            class="w-full h-auto"
+            loading="lazy"
+            />
+            <!-- Logo placeholder due to unknown licensing in source PDF -->
+            </div>
 
-<p>
-5 BD ABDELLAH BEN YASSINE IMM BELLEDONNE ETAGE 5 N°5, CASABLANCA
-</p>
+            <h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
+            Facture
+            </h1>
 
-<p>
-E-mail: Faris.sasauto@gmail.com -- Tel : 0660638487 / 0633151635
-</p>
+        </header>
 
-</footer>
+        <hr class="my-6 border-gray-400">
 
-<div class="h-3 bg-[#d4a017] mt-10"></div>
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-</main>
+            <!-- Left meta -->
+            <div>
+                <ul class="text-sm space-y-1">
+                    <li><strong>Date de facture :</strong>{{facture.datefacture|date:"d/m/Y"}}</li>
+                    <li><strong>N° de BC :</strong> {{facture.facturecommande}}</li>
+                    <!-- <li><strong>N° de BL :</strong> {{facture.receipt_no}}</li> -->
+                </ul>
 
+                <div class="mt-6 text-sm leading-relaxed">
+
+                    <p class="font-semibold">SAS AUTO</p>
+
+                    <p>
+                    5 BD ABDELLAH BEN YASSINE<br>
+                    IMM BELLEDONNE ETAGE 5 N°5<br>
+                    CASABLANCA
+                    </p>
+
+                    <p class="mt-2">
+                    Faris.sasauto@gmail.com
+                    </p>
+
+                    <p>
+                    0660638487 / 0633151635
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Right meta -->
+            <div class="text-sm">
+
+                <p class="text-xl font-semibold mb-4">
+                Bon N° : {{facture.receipt_no}}
+                </p>
+
+                <ul class="space-y-1">
+                    <li>Client: {{facture.customer.customer_name}}</li>
+                    <!-- <li>#N/A</li>
+                    <li>#N/A</li>
+                    <li>#N/A</li> -->
+                </ul>
+
+            </div>
+
+        </section>
+
+        <!-- Table -->
+        <section class="mt-10">
+            <table class="w-full border-collapse text-sm table-striped">
+
+                <thead>
+                    <tr class="bg-[#d4a017] text-white text-left">
+                    <th class="p-2">Produit</th>
+                    <th class="p-2">Designation</th>
+                    <th class="p-2">Quantité</th>
+                    <!-- <th class="p-2">Unité</th> -->
+                    <th class="p-2">Prix HT</th>
+                    <th class="p-2">Total HT</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y">
+
+                    <!-- Repeated rows matching PDF -->
+                    <tr class="">
+                    <td>
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.product.car}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.qty}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        {% for i in items %}
+                        {{i.price}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <!-- <td>
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
+                    </td> -->
+                    <td class="font-semibold">
+                        {% for i in items %}
+                        {{i.total}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+        <!-- Totals -->
+        
+
+        <footer class="text-center text-xs mt-12 border-t pt-4">
+
+            <p>
+            SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088
+            </p>
+
+            <p>
+            5 BD ABDELLAH BEN YASSINE IMM BELLEDONNE ETAGE 5 N°5, CASABLANCA
+            </p>
+
+            <p>
+            E-mail: Faris.sasauto@gmail.com -- Tel : 0660638487 / 0633151635
+            </p>
+
+        </footer>
+
+        <div class="h-3 bg-[#d4a017] mt-10"></div>
+
+    </main>
+    {%endif%}
+{%endfor%}
 </body>
+<script>
+    $('.frenchword').text($.spellingNumber({{facture.total|floatformat:2}}, {
+    lang:'fr',
+    wholesUnit:"Dirhams",
+    fractionUnit:"cents",
+    digitsLengthW2F: 2,
+    decimalSeperator:"et"
+
+  }))
+</script>
 </html>

@@ -9,10 +9,14 @@
         facture
     </a>
     {% else %}
-    {% if not facture.paid_amount > 0 %}
-    <a href="/product/modifierfacture?id={{facture.id}}" type="button" class="btn btn-primary me-5">
-        Modifier
-    </a>
+    {% if facture.bon %}
+        Modifier le bon {{facture.bon.receipt_no}}
+        {%else%}
+        {% if not facture.ispaid %}
+        <a href="/product/modifierfacture?id={{facture.id}}" type="button" class="btn btn-primary me-5">
+            Modifier
+        </a>
+    {%endif%}
     {%endif%}
     <button type="button" class="btn btn-primary fa fa-download" onclick="printfacture('{{facture.id}}')">
         facture
@@ -158,9 +162,13 @@
     
 {% endif %}
 </div>
+<h1 class="mt-5"> ajouter payment</h1><br>
+
 {% if not facture.ispaid %}
+{%if facture.bon%}
+<p>Ajouter des payments dans le bon {{facture.bon.receipt_no}} </p>
+{%else%}
 <div class="mt-5 rounded bg-white row">
-    <strong> ajouter payment</strong><br>
     <div class="col-3">
         Mantant <br>
         <input type="number" class="form-control paidamount  me-2" placeholder="mantant">
@@ -185,6 +193,7 @@
     <button onclick="addpaymentfacture(event, '{{facture.id}}')" class="btn btn-primary w-
     100 mt-3">Ajouter</button>
 </div>
+{% endif %}
 {% endif %}
 {% endif %}
 <!-- {% if not avoir %}

@@ -2237,7 +2237,8 @@ def supplierinfo(request, id):
     payments=PaymentSupplier.objects.filter(supplier=supplier).order_by('-date')
     nbrpayments=payments.count()
     totalpayments=payments.aggregate(total=Sum('amount'))['total'] or 0
-    bons=Itemsbysupplier.objects.filter(supplier=supplier).order_by('-bondate')
+    bons=Itemsbysupplier.objects.filter(supplier=supplier, isfacture=False).order_by('-bondate')
+    factures=Itemsbysupplier.objects.filter(supplier=supplier, isfacture=True).order_by('-bondate')
     avoirs=Avoirsupp.objects.filter(supplier=supplier)
     navoirs=avoirs.count()
     totalavoirs=avoirs.aggregate(total=Sum('total'))['total'] or 0
@@ -2255,8 +2256,8 @@ def supplierinfo(request, id):
         'paymentscount':paymentscount,
         'avoirs':avoirs,
         'navoirs':navoirs,
-        'totalavoirs':totalavoirs
-
+        'totalavoirs':totalavoirs,
+        'factures':factures
     })
 
 def addpaymentsupplier(request, id):

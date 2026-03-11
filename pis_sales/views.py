@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import FormView, DeleteView, View, TemplateView, ListView
 from django.utils import timezone
 from django.urls import reverse, reverse_lazy
-from pis_product.models import PaymentClient, Product, Category, PurchasedProduct, StockOut, StockIn, Returned, Clientprice, Mark
+from pis_product.models import PaymentClient, Product, Category, PurchasedProduct, StockOut, StockIn, Returned, Clientprice, Mark, Facture, Outfacture
 from pis_sales.models import SalesHistory, Avoir
 from pis_product.forms import PurchasedProductForm
 from pis_sales.forms import BillingForm
@@ -691,6 +691,17 @@ class UpdateInvoiceAPIView(View):
         #products=[i.product for i in purcheses]
         items=json.loads(request.POST.get('items'))
         oldtotal=invoice.grand_total
+        newtotal = request.POST.get('grand_total')
+        # check if this bon already genrated to facture by getting facture.bon=thisbon
+        try:
+            facture = Facture.objects.get(bon=invoice)
+            Outfacture.objects.filter(facture=facture).delete()
+            facture.total=request.POST.get('grand_total')
+            facture.date=datebon
+            facture.ispaid = invoice.paid_amount==newtotal
+            facture.save()
+        except Facture.DoesNotExist:
+            facture = None
         # delete the old total in customer's rest
         # if invoice.customer:
         #     customer=Customer.objects.get(id=invoice.customer.id)
@@ -731,6 +742,16 @@ class UpdateInvoiceAPIView(View):
                 #     item.save()
                 # except Exception as e:
                 #     print(e)
+                if facture:
+                    Outfacture.objects.create(
+                        facture=facture,
+                        total=i.get('total'),
+                        product_id=i.get('item_id'),
+                        qty=i.get('qty'),
+                        price=i.get('price'),
+                        date=facture.date,
+                        client=facture.client
+                    )
                 newpurchase=PurchasedProduct.objects.create(
                     product_id=i.get('item_id'),
                     invoice=invoice,

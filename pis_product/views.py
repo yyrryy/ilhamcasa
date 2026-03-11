@@ -2628,8 +2628,9 @@ def supplierinfo(request, id):
     payments=PaymentSupplier.objects.filter(supplier=supplier).order_by('-date')[:30]
     nbrpayments=payments.count()
     totalpayments=PaymentSupplier.objects.filter(supplier=supplier).aggregate(total=Sum('amount'))['total'] or 0
-    bons=Itemsbysupplier.objects.filter(supplier=supplier, isfacture=False).order_by('-bondate')[:30]
-    totalbons=Itemsbysupplier.objects.filter(supplier=supplier, isfacture=False).aggregate(total=Sum('total'))['total'] or 0
+    bons=Itemsbysupplier.objects.filter(supplier=supplier, isfacture=False).order_by('-bondate')
+    factures=Itemsbysupplier.objects.filter(supplier=supplier, isfacture=True).order_by('-bondate')
+    totalbons=Itemsbysupplier.objects.filter(supplier=supplier, ).aggregate(total=Sum('total'))['total'] or 0
     avoirs=Avoirsupp.objects.filter(supplier=supplier)[:30]
     navoirs=avoirs.count()
     totalavoirs=Avoirsupp.objects.filter(supplier=supplier).aggregate(total=Sum('total'))['total'] or 0
@@ -2653,7 +2654,8 @@ def supplierinfo(request, id):
         'totalavoirs':totalavoirs,
         'currentvalue':supplierCurrentValue,
         'totalbons':totalbons,
-        'sold':sold
+        'sold':sold,
+        'factures':factures
     })
 
 def addpaymentsupplier(request, id):
@@ -3916,7 +3918,8 @@ def bonprint(request, id):
     orderitems=PurchasedProduct.objects.filter(invoice=order)
     # split the orderitems into chunks of 10 items
     orderitems=list(orderitems)
-    # orderitems=[orderitems[i:i+37] for i in range(0, len(orderitems), 37)]
+    #orderitems=[orderitems[:11]]
+    orderitems=[orderitems[i:i+13] for i in range(0, len(orderitems), 13)]
     tva=round(float(order.grand_total)-(float(order.grand_total)/1.2), 2)
     payments=round(PaymentClient.objects.filter(bon=order).aggregate(Sum('amount')).get('amount__sum') or 0, 2)
     #text neartotalweather it's avance or paid
@@ -3928,7 +3931,9 @@ def bonprint(request, id):
             text='(Payé)'
     customer=order.customer
     total_transactions = SalesHistory.objects.filter(customer=customer).aggregate(Sum('grand_total'))
-    total_transactions = float(total_transactions.get('grand_total__sum') or 0)
+    totlafactures = Facture.objects.filter(client=customer, bon__isnull=True).aggregate(Sum('total')).get('grand_total__sum', 0)
+    print("================", Facture.objects.filter(client=customer, bon__isnull=True))
+    total_transactions = float(total_transactions.get('grand_total__sum') or 0)+totlafactures
     total_payments = PaymentClient.objects.filter(client=customer).aggregate(Sum('amount'))
     total_payments = float(total_payments.get('amount__sum') or 0)
     total_avoirs = Avoir.objects.filter(customer=customer).aggregate(Sum('grand_total')).get('grand_total__sum') or 0
@@ -4433,6 +4438,14 @@ def addpaymentbon(request):
         client.save()
     
     bon.paid_amount=float(bon.paid_amount)+float(amount)
+    print("=======", float(bon.paid_amount)+float(amount), bon.grand_total)
+    if float(bon.paid_amount) == float(bon.grand_total):
+        try:
+            facture = Facture.objects.get(bon=bon)
+            facture.ispaid=True
+            facture.save()
+        except Facture.DoesNotExist:
+            pass
     bon.save()
     pay=PaymentClient.objects.create(
         client=client,
@@ -4804,6 +4817,12 @@ def deleteclientpayment(request):
     if bon:
         bon.paid_amount=float(bon.paid_amount)-float(reglement.amount)
         bon.save()
+        try:
+            facture = Facture.objects.get(bon=bon)
+            facture.ispaid=float(bon.paid_amount)==float(bon.grand_total)
+            facture.save()
+        except Facture.DoesNotExist:
+            pass
     reglement.delete()
     return JsonResponse({
         'success':True
