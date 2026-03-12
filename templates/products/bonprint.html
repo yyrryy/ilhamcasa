@@ -16,6 +16,9 @@ Using system-ui / Open Sans equivalent.
 
 <style>
 /* Page break metaphor for print */
+td{
+    vertical-align: top;
+}
 .break-after-page{
 page-break-after: always;
 }
@@ -41,6 +44,7 @@ page-break-after: always;
             alt="Logo SAS AUTO - Service Automobile Spécialisé"
             class="w-full h-auto"
             loading="lazy"
+            style="width: 35px;"
             />
             <!-- Logo placeholder due to unknown licensing in source PDF -->
             </div>
@@ -73,7 +77,7 @@ page-break-after: always;
                     CASABLANCA
                     </p>
 
-                    <p class="mt-2">
+                    <p>
                     Faris.sasauto@gmail.com
                     </p>
 
@@ -94,7 +98,7 @@ page-break-after: always;
 
                 <ul class="space-y-1">
                     <li>Client: {{bon.customer.customer_name}}</li>
-                    <li>Client: {{bon.customer.ice}}</li>
+                    {% if bon.customer.ice %}<li>ICE: {{bon.customer.ice}}</li>{%endif%}
                     <li>Matrictation: {%if bon.note %}{{bon.note}}{%endif%}</li>
                     <!-- <li>#N/A</li>
                     <li>#N/A</li>
@@ -106,7 +110,7 @@ page-break-after: always;
         </section>
 
         <!-- Table -->
-        <section class="mt-10">
+        <section >
             <table class="w-full border-collapse text-sm table-striped">
 
                 <thead>
@@ -124,7 +128,7 @@ page-break-after: always;
 
                     <!-- Repeated rows matching PDF -->
                     <tr class="">
-                    <td>
+                    <td style="height: 118mm;">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
@@ -148,7 +152,7 @@ page-break-after: always;
                         <br>
                         {%endfor%}
                     </td>
-                    <!-- <td>
+                    <!-- style="height: 150mm;" <td>
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
@@ -241,6 +245,8 @@ page-break-after: always;
             alt="Logo SAS AUTO - Service Automobile Spécialisé"
             class="w-full h-auto"
             loading="lazy"
+            style="width: 35px;"
+            
             />
             <!-- Logo placeholder due to unknown licensing in source PDF -->
             </div>
@@ -304,7 +310,7 @@ page-break-after: always;
         </section>
 
         <!-- Table -->
-        <section class="mt-10">
+        <section >
             <table class="w-full border-collapse text-sm table-striped">
 
                 <thead>
@@ -322,7 +328,7 @@ page-break-after: always;
 
                     <!-- Repeated rows matching PDF -->
                     <tr class="">
-                    <td>
+                    <td style="height: 118mm;">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
@@ -346,7 +352,7 @@ page-break-after: always;
                         <br>
                         {%endfor%}
                     </td>
-                    <!-- <td>
+                    <!-- style="height: 150mm;" <td>
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
