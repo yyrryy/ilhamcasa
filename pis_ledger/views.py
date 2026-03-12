@@ -219,7 +219,10 @@ class CustomerLedgerDetailsView(TemplateView):
         #     payment_total = 0
         total_transactions = SalesHistory.objects.filter(customer=customer).aggregate(Sum('grand_total'))
         totlafactures = Facture.objects.filter(client=customer, bon__isnull=True).aggregate(Sum('total')).get('total__sum', 0)
-        total_transactions = float(total_transactions.get('grand_total__sum') or 0)+totlafactures
+        if totlafactures:
+            total_transactions = float(total_transactions.get('grand_total__sum') or 0)+totlafactures
+        else:
+            total_transactions = float(total_transactions.get('grand_total__sum') or 0)
         total_payments = PaymentClient.objects.filter(client=customer).aggregate(Sum('amount'))
         total_payments = float(total_payments.get('amount__sum') or 0)
         total_avoirs = Avoir.objects.filter(customer=customer).aggregate(Sum('grand_total')).get('grand_total__sum') or 0
