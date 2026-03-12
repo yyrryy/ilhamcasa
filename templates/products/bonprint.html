@@ -128,7 +128,7 @@ page-break-after: always;
 
                     <!-- Repeated rows matching PDF -->
                     <tr class="">
-                    <td style="height: 118mm;">
+                    <td style="height: 105mm;">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
@@ -300,6 +300,8 @@ page-break-after: always;
 
                 <ul class="space-y-1">
                     <li>Client: {{bon.customer.customer_name}}</li>
+                    {% if bon.customer.ice %}<li>ICE: {{bon.customer.ice}}</li>{%endif%}
+                    <li>Matrictation: {%if bon.note %}{{bon.note}}{%endif%}</li>
                     <!-- <li>#N/A</li>
                     <li>#N/A</li>
                     <li>#N/A</li> -->
@@ -328,7 +330,7 @@ page-break-after: always;
 
                     <!-- Repeated rows matching PDF -->
                     <tr class="">
-                    <td style="height: 118mm;">
+                    <td style="height: 105mm;">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>

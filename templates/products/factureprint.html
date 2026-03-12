@@ -129,7 +129,7 @@ td{vertical-align: top;}
 
                     <!-- Repeated rows matching PDF -->
                     <tr class="">
-                    <td style="height: 111mm;">
+                    <td style="height: 105mm;">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
@@ -267,7 +267,7 @@ td{vertical-align: top;}
         <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
             <!-- Left meta -->
-            <div>
+            <div class="flex">
                 <ul class="text-sm space-y-1">
                     <li><strong>Date de facture :</strong>{{facture.datefacture|date:"d/m/Y"}}</li>
                     <li><strong>N° de BC :</strong> {{facture.facturecommande}}</li>
@@ -303,16 +303,6 @@ td{vertical-align: top;}
                 Bon N° : {{facture.receipt_no}}
                 </p>
 
-                <ul class="space-y-1">
-                    <li>Client: {{facture.client.customer_name}}</li>
-                    <li>ICE: {{facture.client.ice}}</li>
-                    {%if facture.client.address%}<li>ADDRESS: {{facture.client.address}}</li>{%endif%}
-                    {%if facture.note%}<li>NOTE: {{facture.note}}</li>{%endif%}
-                    <!-- <li>#N/A</li>
-                    <li>#N/A</li>
-                    <li>#N/A</li> -->
-                </ul>
-
             </div>
 
         </section>
@@ -336,7 +326,7 @@ td{vertical-align: top;}
 
                     <!-- Repeated rows matching PDF -->
                     <tr class="">
-                    <td style="height: 111mm;">
+                    <td style="height: 105mm;">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
