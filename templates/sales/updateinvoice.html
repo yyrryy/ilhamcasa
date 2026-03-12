@@ -45,6 +45,10 @@
                 <small>N° bon</small>
                 <input readonly type="text" name="datebon" placeholder="Date" value="{{invoice.receipt_no}}" class="form-control">
             </div>
+            <div class="mt-2">
+                <small>Matriculation:</small>
+                <input type="text" name="note" placeholder="Matriculation" value="{%if invoice.note%}{{invoice.note}}{%endif%}" class="form-control note">
+            </div>
 
 						{% if not invoice.customer == None %}
 						<div class="mt-2">
@@ -520,6 +524,7 @@
                 var remaining_amount = $('#remainingAmount').text();
                 var paid_amount = $('#paidAmount').val();
                 var datebon=$('[name="datebon"]').val()
+                var note=$('[name="note"]').val()
 
                 const itemIds = items.map(item => item.item_id);
                 const uniqueItemIds = Array.from(new Set(itemIds));
@@ -532,6 +537,7 @@
                         $.post("{% url 'sales:update_invoice_api' %}", {
                             'invoice_id': {{invoice.id}},
                             'datebon':datebon,
+                            'note':note,
                             'items': JSON.stringify(items),
                             'grand_total': grand_total,
                             'customerid':$('#customer').val(),

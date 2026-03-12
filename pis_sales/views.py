@@ -684,6 +684,7 @@ class UpdateInvoiceAPIView(View):
         invoiceid=request.POST.get('invoice_id')
         customerid=request.POST.get('customerid')
         datebon=request.POST.get('datebon')
+        note=request.POST.get('note')
         datebon = datetime.strptime(datebon, '%Y-%m-%d')
         print('>>> cust', customerid)
         invoice = SalesHistory.objects.get(id=invoiceid)
@@ -698,6 +699,7 @@ class UpdateInvoiceAPIView(View):
             Outfacture.objects.filter(facture=facture).delete()
             facture.total=request.POST.get('grand_total')
             facture.date=datebon
+            facture.note = note
             facture.ispaid = invoice.paid_amount==newtotal
             facture.save()
         except Facture.DoesNotExist:
@@ -769,6 +771,7 @@ class UpdateInvoiceAPIView(View):
         invoice.grand_total=request.POST.get('grand_total')
         invoice.datebon=datebon
         invoice.created_at=datebon
+        invoice.note=note
         invoice.customer_id=customerid
         invoice.save()
         # # customer_name = self.request.POST.get('customer_name')

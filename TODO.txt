@@ -23,5 +23,8 @@ add bon command number in field in bon
 devis generer bon or facture
 quantity before price in creation devis
 quantity before price in creation facture
+reglement bon acht in bon like bon livraison
+cadre facture bon devis
+note in update bon
 update paymrnt date in client history..
 

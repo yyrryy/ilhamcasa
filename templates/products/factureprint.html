@@ -96,7 +96,9 @@ page-break-after: always;
                 <ul class="space-y-1">
                     <li>Client: {{facture.client.customer_name}}</li>
                     <li>ICE: {{facture.client.ice}}</li>
-                    <li>ADDRESS: {{facture.client.address}}</li>
+                    {%if facture.client.address%}<li>ADDRESS: {{facture.client.address}}</li>{%endif%}
+                    {%if facture.note%}<li>NOTE: {{facture.note}}</li>{%endif%}
+
                     <!-- <li>#N/A</li>
                     <li>#N/A</li>
                     <li>#N/A</li> -->
