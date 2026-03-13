@@ -66,14 +66,13 @@ td{vertical-align: top;}
                     <li><strong>N° de BL :</strong> {{facture.bon.receipt_no}}</li>
                 </ul>
 
-                <div class="mt-6 text-sm leading-relaxed">
+                <div class="text-sm leading-relaxed">
 
                     <p class="font-semibold">SAS AUTO</p>
 
                     <p>
                     5 BD ABDELLAH BEN YASSINE<br>
-                    IMM BELLEDONNE ETAGE 5 N°5<br>
-                    CASABLANCA
+                    IMM BELLEDONNE ETAGE 5 N°5 CASABLANCA
                     </p>
 
                     <p>
@@ -97,7 +96,7 @@ td{vertical-align: top;}
 
                 <ul class="space-y-1">
                     <li>Client: {{facture.client.customer_name}}</li>
-                    <li>ICE: {{facture.client.ice}}</li>
+                    {%if facture.client.ice%}<li>ICE: {{facture.client.ice}}</li>{%endif%}
                     {%if facture.client.address%}<li>ADDRESS: {{facture.client.address}}</li>{%endif%}
                     {%if facture.note%}<li>NOTE: {{facture.note}}</li>{%endif%}
 
@@ -116,12 +115,12 @@ td{vertical-align: top;}
 
                 <thead>
                     <tr class="bg-[#d4a017] text-white text-left">
-                    <th class="p-2">Produit</th>
-                    <th class="p-2">Designation</th>
-                    <th class="p-2">Quantité</th>
-                    <!-- <th class="p-2">Unité</th> -->
-                    <th class="p-2">Prix TTC</th>
-                    <th class="p-2">Total TTC</th>
+                    <th class="p-2 border border-gray-800">Produit</th>
+                    <th class="p-2 border border-gray-800">Designation</th>
+                    <th class="p-2 border border-gray-800">Quantité</th>
+                    <!-- <th class="p-2 border border-gray-800">Unité</th> -->
+                    <th class="p-2 border border-gray-800">Prix TTC</th>
+                    <th class="p-2 border border-gray-800">Total TTC</th>
                     </tr>
                 </thead>
 
@@ -129,37 +128,37 @@ td{vertical-align: top;}
 
                     <!-- Repeated rows matching PDF -->
                     <tr class="">
-                    <td style="height: 105mm;">
+                    <td class="border border-gray-800" style="height: 115mm;">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.product.car}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.qty}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.price}}
                         <br>
                         {%endfor%}
                     </td>
-                    <!-- <td>
+                    <!-- <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
                         {%endfor%}
                     </td> -->
-                    <td class="font-semibold">
+                    <td class="border border-gray-800" class="font-semibold">
                         {% for i in items %}
                         {{i.total}}
                         <br>
@@ -216,7 +215,7 @@ td{vertical-align: top;}
 
             </section>
 
-        <footer class="text-center text-xs mt-2 border-t pt-4">
+        <footer class="text-center text-xs border-t pt-4">
 
             <p>
             SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088
@@ -274,14 +273,13 @@ td{vertical-align: top;}
                     <!-- <li><strong>N° de BL :</strong> {{facture.receipt_no}}</li> -->
                 </ul>
 
-                <div class="mt-6 text-sm leading-relaxed">
+                <div class="text-sm leading-relaxed">
 
                     <p class="font-semibold">SAS AUTO</p>
 
                     <p>
                     5 BD ABDELLAH BEN YASSINE<br>
-                    IMM BELLEDONNE ETAGE 5 N°5<br>
-                    CASABLANCA
+                    IMM BELLEDONNE ETAGE 5 N°5 CASABLANCA
                     </p>
 
                     <p>
@@ -313,12 +311,12 @@ td{vertical-align: top;}
 
                 <thead>
                     <tr class="bg-[#d4a017] text-white text-left">
-                    <th class="p-2">Produit</th>
-                    <th class="p-2">Designation</th>
-                    <th class="p-2">Quantité</th>
-                    <!-- <th class="p-2">Unité</th> -->
-                    <th class="p-2">Prix HT</th>
-                    <th class="p-2">Total HT</th>
+                    <th class="p-2 border border-gray-800">Produit</th>
+                    <th class="p-2 border border-gray-800">Designation</th>
+                    <th class="p-2 border border-gray-800">Quantité</th>
+                    <!-- <th class="p-2 border border-gray-800">Unité</th> -->
+                    <th class="p-2 border border-gray-800">Prix HT</th>
+                    <th class="p-2 border border-gray-800">Total HT</th>
                     </tr>
                 </thead>
 
@@ -326,37 +324,37 @@ td{vertical-align: top;}
 
                     <!-- Repeated rows matching PDF -->
                     <tr class="">
-                    <td style="height: 105mm;">
+                    <td class="border border-gray-800" style="height: 105mm;">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.product.car}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.qty}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.price}}
                         <br>
                         {%endfor%}
                     </td>
-                    <!-- <td>
+                    <!-- <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
                         {%endfor%}
                     </td> -->
-                    <td class="font-semibold">
+                    <td class="border border-gray-800" class="font-semibold">
                         {% for i in items %}
                         {{i.total}}
                         <br>
@@ -374,7 +372,7 @@ td{vertical-align: top;}
         <!-- Totals -->
         
 
-        <footer class="text-center text-xs mt-2 border-t pt-4">
+        <footer class="text-center text-xs border-t pt-4">
 
             <p>
             SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088

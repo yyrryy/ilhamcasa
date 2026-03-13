@@ -50,7 +50,7 @@ page-break-after: always;
             </div>
 
             <h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
-            BON
+            BL
             </h1>
 
         </header>
@@ -67,7 +67,7 @@ page-break-after: always;
                     <!-- <li><strong>N° de BL :</strong> {{bon.receipt_no}}</li> -->
                 </ul>
 
-                <div class="mt-6 text-sm leading-relaxed">
+                <div class="text-sm leading-relaxed">
 
                     <p class="font-semibold">SAS AUTO</p>
 
@@ -99,7 +99,7 @@ page-break-after: always;
                 <ul class="space-y-1">
                     <li>Client: {{bon.customer.customer_name}}</li>
                     {% if bon.customer.ice %}<li>ICE: {{bon.customer.ice}}</li>{%endif%}
-                    <li>Matricutation: {%if bon.note %}{{bon.note}}{%endif%}</li>
+                    <li>Immatricutation: {%if bon.note %}{{bon.note}}{%endif%}</li>
                     <!-- <li>#N/A</li>
                     <li>#N/A</li>
                     <li>#N/A</li> -->
@@ -111,54 +111,54 @@ page-break-after: always;
 
         <!-- Table -->
         <section >
-            <table class="w-full border-collapse text-sm table-striped">
+            <table class="w-full border-collapse text-sm table-striped border border-gray-800">
 
                 <thead>
                     <tr class="bg-[#d4a017] text-white text-left">
-                    <th class="p-2">Produit</th>
-                    <th class="p-2">Designation</th>
-                    <th class="p-2">Quantité</th>
-                    <!-- <th class="p-2">Unité</th> -->
-                    <th class="p-2">Prix TTC</th>
-                    <th class="p-2">Total TTC</th>
+                    <th class="p-2 border border-gray-800">Produit</th>
+                    <th class="p-2 border border-gray-800">Designation</th>
+                    <th class="p-2 border border-gray-800">Quantité</th>
+                    <!-- <th class="p-2 border border-gray-800">Unité</th> -->
+                    <th class="p-2 border border-gray-800">Prix TTC</th>
+                    <th class="p-2 border border-gray-800">Total TTC</th>
                     </tr>
                 </thead>
 
                 <tbody class="divide-y">
 
                     <!-- Repeated rows matching PDF -->
-                    <tr class="">
-                    <td style="height: 105mm;">
+                    <tr class="border border-gray-800">
+                    <td class="border border-gray-800" style="height: 105mm;">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.product.car}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.quantity}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.price}}
                         <br>
                         {%endfor%}
                     </td>
-                    <!-- style="height: 150mm;" <td>
+                    <!-- style="height: 150mm;" <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
                         {%endfor%}
                     </td> -->
-                    <td class="font-semibold">
+                    <td class="border border-gray-800" class="font-semibold">
                         {% for i in items %}
                         {{i.purchase_amount}}
                         <br>
@@ -251,8 +251,8 @@ page-break-after: always;
             <!-- Logo placeholder due to unknown licensing in source PDF -->
             </div>
 
-            <h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
-            BON
+            <h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1 ">
+            BL
             </h1>
 
         </header>
@@ -269,7 +269,7 @@ page-break-after: always;
                     <!-- <li><strong>N° de BL :</strong> {{bon.receipt_no}}</li> -->
                 </ul>
 
-                <div class="mt-6 text-sm leading-relaxed">
+                <div class="text-sm leading-relaxed">
 
                     <p class="font-semibold">SAS AUTO</p>
 
@@ -301,7 +301,7 @@ page-break-after: always;
                 <ul class="space-y-1">
                     <li>Client: {{bon.customer.customer_name}}</li>
                     {% if bon.customer.ice %}<li>ICE: {{bon.customer.ice}}</li>{%endif%}
-                    <li>Matricutation: {%if bon.note %}{{bon.note}}{%endif%}</li>
+                    <li>Immatricutation: {%if bon.note %}{{bon.note}}{%endif%}</li>
                     <!-- <li>#N/A</li>
                     <li>#N/A</li>
                     <li>#N/A</li> -->
@@ -313,7 +313,7 @@ page-break-after: always;
 
         <!-- Table -->
         <section >
-            <table class="w-full border-collapse text-sm table-striped">
+            <table class="w-full border-collapse text-sm table-striped border border-gray-800">
 
                 <thead>
                     <tr class="bg-[#d4a017] text-white text-left">
@@ -330,37 +330,37 @@ page-break-after: always;
 
                     <!-- Repeated rows matching PDF -->
                     <tr class="">
-                    <td style="height: 105mm;">
+                    <td class="border border-gray-800" style="height: 105mm;">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.product.car}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.quantity}}
                         <br>
                         {%endfor%}
                     </td>
-                    <td>
+                    <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.price}}
                         <br>
                         {%endfor%}
                     </td>
-                    <!-- style="height: 150mm;" <td>
+                    <!-- style="height: 150mm;" <td class="border border-gray-800">
                         {% for i in items %}
                         {{i.product.ref}}
                         <br>
                         {%endfor%}
                     </td> -->
-                    <td class="font-semibold">
+                    <td class="border border-gray-800" class="font-semibold">
                         {% for i in items %}
                         {{i.purchase_amount}}
                         <br>
