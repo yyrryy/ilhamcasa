@@ -700,7 +700,7 @@ class UpdateInvoiceAPIView(View):
             facture.total=request.POST.get('grand_total')
             facture.date=datebon
             facture.note = note
-            facture.ispaid = invoice.paid_amount==newtotal
+            facture.ispaid = float(invoice.paid_amount)==float(newtotal)
             facture.save()
         except Facture.DoesNotExist:
             facture = None
