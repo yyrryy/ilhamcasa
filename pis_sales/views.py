@@ -701,6 +701,7 @@ class UpdateInvoiceAPIView(View):
             facture.date=datebon
             facture.note = note
             facture.ispaid = float(invoice.paid_amount)==float(newtotal)
+            print("===========", float(invoice.paid_amount)==float(newtotal), float(invoice.paid_amount), float(newtotal))
             facture.save()
         except Facture.DoesNotExist:
             facture = None
