@@ -4596,7 +4596,7 @@ def createfacture(request):
             bon=SalesHistory.objects.get(receipt_no=bon_number)
             bon.generatedtofature=True
             facture.bon=bon
-            facture.note=note
+            facture.note=bon.note
             bon.save()
             if bon.paid_amount==bon.grand_total:
                 facture.ispaid=True
