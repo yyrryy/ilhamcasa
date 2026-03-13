@@ -98,7 +98,7 @@ td{vertical-align: top;}
                     <li>Client: {{facture.client.customer_name}}</li>
                     {%if facture.client.ice%}<li>ICE: {{facture.client.ice}}</li>{%endif%}
                     {%if facture.client.address%}<li>ADDRESS: {{facture.client.address}}</li>{%endif%}
-                    {%if facture.note%}<li>NOTE: {{facture.note}}</li>{%endif%}
+                    {%if facture.note%}<li>Immatriculation: {{facture.note}}</li>{%endif%}
 
                     <!-- <li>#N/A</li>
                     <li>#N/A</li>
@@ -266,11 +266,11 @@ td{vertical-align: top;}
         <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
             <!-- Left meta -->
-            <div class="flex">
+            <div>
                 <ul class="text-sm space-y-1">
-                    <li><strong>Date de facture :</strong>{{facture.datefacture|date:"d/m/Y"}}</li>
-                    <li><strong>N° de BC :</strong> {{facture.facturecommande}}</li>
-                    <!-- <li><strong>N° de BL :</strong> {{facture.receipt_no}}</li> -->
+                    <li><strong>Date de facture :</strong>{{facture.date|date:"d/m/Y"}}</li>
+                    <li><strong>N° de BC :</strong> {{facture.boncommande}}</li>
+                    <li><strong>N° de BL :</strong> {{facture.bon.receipt_no}}</li>
                 </ul>
 
                 <div class="text-sm leading-relaxed">
@@ -298,8 +298,19 @@ td{vertical-align: top;}
             <div class="text-sm">
 
                 <p class="text-xl font-semibold mb-4">
-                Bon N° : {{facture.receipt_no}}
+                Facture N° : {{facture.facture_no}}
                 </p>
+
+                <ul class="space-y-1">
+                    <li>Client: {{facture.client.customer_name}}</li>
+                    {%if facture.client.ice%}<li>ICE: {{facture.client.ice}}</li>{%endif%}
+                    {%if facture.client.address%}<li>ADDRESS: {{facture.client.address}}</li>{%endif%}
+                    {%if facture.note%}<li>Immatriculation: {{facture.note}}</li>{%endif%}
+
+                    <!-- <li>#N/A</li>
+                    <li>#N/A</li>
+                    <li>#N/A</li> -->
+                </ul>
 
             </div>
 
