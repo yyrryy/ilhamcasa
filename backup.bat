@@ -27,7 +27,7 @@ echo Backup completed.
 
 echo Sending backup to remote server...
 
-scp "%BACKUP_FILE%" user@167.71.77.64:/home/yurey/ilhamcasabackupfolder
+scp "%BACKUP_FILE%" ilhamcasa@167.71.77.64:/home/yurey/ilhamcasabackupfolder
 
 echo Remote copy completed.
 
