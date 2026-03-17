@@ -19,7 +19,7 @@ set BACKUP_FILE=%BACKUP_DIR%\backup.sql
 echo Backing up database %DATABASE_NAME%...
 
 :: Set PGPASSFILE environment variable to point to .pgpass file
-set PGPASSFILE=C:\Users\Public\pgpass.conf
+set PGPASSFILE=../pgpass.conf
 
 "C:\bin\pg_dump.exe" -h localhost -U %USER% -b -v -f "%BACKUP_FILE%" %DATABASE_NAME%
 
