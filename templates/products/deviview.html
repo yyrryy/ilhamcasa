@@ -143,8 +143,8 @@
                     <th style="width: 45%;">Article</th>
                     <th>Stock</th>
                     <th>Prix acht</th>
-                    <th>Prix ventes</th>
                     <th>Quantité</th>
+                    <th>Prix ventes</th>
                     <th>Total</th>
                     <th></th>
                 </tr>
@@ -395,7 +395,7 @@
           localStorage.setItem('deviitems',JSON.stringify(bonitems))
             //let thisprice=0
             
-            $('.itemsbon').prepend(`<tr class="item-row" id="itemrow${id}""><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${ref} - ${car}</strong></td><td class="stock ${stock==0 ? "bg-danger text-white" : ""}">${stock}</td><td class="prachat">${pr_achat}</td><td><input type="hidden" class="prnet" value=${prnet}><input min=${prnet} value=${thisprice} class="form-control price" placeholder="Price" type="number" oninput="saverow(event)"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${prnet}</span> </td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value=0 oninput="saverow(event)"></td><td class="total"></td><input type="hidden" class="productid" value=${id}><td><i class="btn btn-danger delete" title="Supprimer" productid="${id}" onclick="removeline(event, '${id}')"></i></td></tr>`);
+            $('.itemsbon').append(`<tr class="item-row" id="itemrow${id}""><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${ref} - ${car}</strong></td><td class="stock ${stock==0 ? "bg-danger text-white" : ""}">${stock}</td><td class="prachat">${pr_achat}</td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value=0 oninput="saverow(event)"></td><td><input type="hidden" class="prnet" value=${prnet}><input min=${prnet} value=${thisprice} class="form-control price" placeholder="Price" type="number" oninput="saverow(event)"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${prnet}</span> </td><td class="total"></td><input type="hidden" class="productid" value=${id}><td><i class="btn btn-danger delete" title="Supprimer" productid="${id}" onclick="removeline(event, '${id}')"></i></td></tr>`);
 
                 jQuery().invoice().init
         
@@ -431,7 +431,7 @@
                 prachat=el.attr('prachat')
                 price=el.attr('price')
                 prnet=el.attr('prnet')
-                $('.itemsbon').append(`<tr class="item-row "><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${item}</strong></td><td class="stock ${stock==0 ? "bg-danger text-white" : ""}">${stock}</td><td class="prachat">${prachat}</td><td><input min=${prnet} value=${prachat} class="form-control price" placeholder="Price" type="number"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${prnet}</span> </td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value="0"></td><td><span class="total">0</span></td><input type="hidden" class="productid" value=${id}><td><i class="btn btn-danger delete" title="Supprimer">X</i></td></tr>`);
+                $('.itemsbon').append(`<tr class="item-row "><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${item}</strong></td><td class="stock ${stock==0 ? "bg-danger text-white" : ""}">${stock}</td><td class="prachat">${prachat}</td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value="0"></td><td><input min=${prnet} value=${prachat} class="form-control price" placeholder="Price" type="number"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${prnet}</span> </td><td><span class="total">0</span></td><input type="hidden" class="productid" value=${id}><td><i class="btn btn-danger delete" title="Supprimer">X</i></td></tr>`);
                 $('.delete').on('click', function () {
                     $(this).closest('tr').remove();
                 });
