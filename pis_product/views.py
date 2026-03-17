@@ -3932,7 +3932,6 @@ def bonprint(request, id):
     customer=order.customer
     total_transactions = SalesHistory.objects.filter(customer=customer).aggregate(Sum('grand_total'))
     totlafactures = Facture.objects.filter(client=customer, bon__isnull=True).aggregate(Sum('total')).get('grand_total__sum', 0)
-    print("================", Facture.objects.filter(client=customer, bon__isnull=True))
     total_transactions = float(total_transactions.get('grand_total__sum') or 0)+totlafactures
     total_payments = PaymentClient.objects.filter(client=customer).aggregate(Sum('amount'))
     total_payments = float(total_payments.get('amount__sum') or 0)
@@ -4262,11 +4261,11 @@ def devisprint(request, id):
     orderitems=Devisitems.objects.filter(devis=order)
     # split the orderitems into chunks of 10 items
     orderitems=list(orderitems)
-    orderitems=[orderitems[i:i+33] for i in range(0, len(orderitems), 33)]
+    orderitems=[orderitems[i:i+13] for i in range(0, len(orderitems), 13)]
     
     ctx={
         'title':f'Devis {order.devis_no}',
-        'devis':order,
+        'bon':order,
         'orderitems':orderitems,
     }
     return render(request, 'products/devisprint.html', ctx)

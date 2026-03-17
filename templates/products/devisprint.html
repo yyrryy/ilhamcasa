@@ -1,316 +1,388 @@
-{% load template_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-    <style>
-      @media print {
-         .livraison-holder {
-             height: 27.5cm; /* Slightly less than the maximum printable height */
-             width: 21cm; /* Full width of A4 */
-             border: 1px solid black; /* For debugging and visibility */
-             page-break-after: always; /* Ensures each div starts on a new page */
-             box-sizing: border-box; /* Include padding and border in the element's total width and height */
-         }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-         /* Reset margins and paddings for printing */
-         body {
-             margin: 0;
-             padding: 0;
-         }
-         td > div{
-           margin:4px;
-         }
+<title>Devis - SAS AUTO</title>
 
-         /* Optional: If you need to adjust margins more precisely */
-         @page {
-             margin: 0; /* Remove any default margins */
-         }
-     }
-    </style>
-    <script src="/static/js/jquery.min.1.7.js"></script>
-    <script src="/static/js/spellingnumbers.js"></script>
-    <link href="/static/css/bootstrap.css" rel="stylesheet" />
+<!-- Tailwind CDN (for demonstration; production should compile JIT build) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!--
+Font substitution due to unknown licensing in source PDF.
+Using system-ui / Open Sans equivalent.
+-->
+
+<style>
+/* Page break metaphor for print */
+td{
+    vertical-align: top;
+}
+.break-after-page{
+page-break-after: always;
+}
+</style>
+
 </head>
-<body>
-<div id="printfc{{devis.id}}" style="position:relative;">
 
-  {% for i in orderitems %}
-  {% if forloop.counter == orderitems|length %}
-  <!-- last iteration -->
-  <div class="postion-relative px-5 facture{{devis.id}}holder p-3" style="min-height: 29.7cm;width: 21cm; border:1px solid;">
-    <div class="border p-2 text-center">
-      {{user.retailer_user.retailer.name}}
-    </div>
+<body class="bg-gray-200 font-sans text-gray-900">
+{% for items in orderitems %}
+    {% if forloop.counter == orderitems|length %}
+    <!-- last iteration -->
+    <main class="max-w-5xl mx-auto bg-gray-100 border border-gray-500 p-10" style="height: 297mm;">
 
-    <!-- facture header -->
-    <div class="">
-        <div class="d-flex justify-content-between">
-          <div>
-            <div
-              >Devis N°: <strong>{{devis.devis_no}}</strong>
+        <!-- Top gold bar -->
+        <div class="h-3 bg-[#d4a017] mb-8"></div>
+
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+
+            <!-- Logo -->
+            <div class="w-64">
+            <img 
+            src="{%if user.retailer_user.retailer.logo%}{{user.retailer_user.retailer.logo.url}}{%endif%}"
+            alt="Logo SAS AUTO - Service Automobile Spécialisé"
+            class="w-full h-auto"
+            loading="lazy"
+            style="width: 115px;"
+            />
+            <!-- Logo placeholder due to unknown licensing in source PDF -->
             </div>
+
+            <h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
+            DEVIS
+            </h1>
+
+        </header>
+
+        <hr class="my-6 border-gray-400">
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+            <!-- Left meta -->
             <div>
-              Date: <strong>{{devis.date|date:"d/m/Y"}}</strong>
+                <ul class="text-sm space-y-1">
+                    <li><strong>Date de bon :</strong>{{bon.date|date:"d/m/Y"}}</li>
+                    <!-- <li><strong>N° de BC :</strong> {{bon.boncommande}}</li> -->
+                    <!-- <li><strong>N° de BL :</strong> {{bon.receipt_no}}</li> -->
+                </ul>
+
+                <div class="text-sm leading-relaxed">
+
+                    <p class="font-semibold">SAS AUTO</p>
+
+                    <p>
+                    5 BD ABDELLAH BEN YASSINE<br>
+                    IMM BELLEDONNE ETAGE 5 N°5<br>
+                    CASABLANCA
+                    </p>
+
+                    <p>
+                    Faris.sasauto@gmail.com
+                    </p>
+
+                    <p>
+                    0660638487 / 0633151635
+                    </p>
+
+                </div>
+
             </div>
-          </div>
-          <div>
-            Client: <strong>{{devis.client.customer_name.upper}}</strong>
-          </div>
-          
-        </div>
 
+            <!-- Right meta -->
+            <div class="text-sm">
 
-    </div>
+                <p class="text-xl font-semibold mb-4">
+                Devis N° : {{bon.devis_no}}
+                </p>
 
-    <!-- facture items -->
-    <div class="orderitems mt-3 bg-white rounded p-2 position-relative">
+                <ul class="space-y-1">
+                    <li>Client: {{bon.client.customer_name}}</li>
+                    {% if bon.client.ice %}<li>ICE: {{bon.client.ice}}</li>{%endif%}
+                    <!-- <li>Immatriculation: {%if bon.note %}{{bon.note}}{%endif%}</li> -->
+                    <!-- <li>#N/A</li>
+                    <li>#N/A</li>
+                    <li>#N/A</li> -->
+                </ul>
 
-      <table class="table table-bordered fcitems" style="border-color: black;font-family: serif; font-size:13px;">
-        <thead style="font-size: 10px;
-        font-weight: 800;" class="text-center">
-          <tr>
-            <!-- <td style="width: 19%;">Ref</td> -->
-            <td style="width: 35%;">Designation</td>
-            <td style="width: 9%;">Qté</td>
-            <td style="width: 14%;">P.U</td>
-            <!-- <td style="width: 5%;">Rem</td> -->
-            <td style="width: 16%">Mantant</td>
-          </tr>
-        </thead>
-        <tbody>
-                <tr>
-                    <!-- <td style="height: 150mm;padding-left:3px">
-                      {% for v in i %}
-                      {{v.product.ref.upper}} {{i.id}}
-                      {% if not forloop.counter == i|length %}<br>{% endif %}
-                      {% endfor %}
+            </div>
+
+        </section>
+
+        <!-- Table -->
+        <section >
+            <table class="w-full border-collapse text-sm table-striped border border-gray-800">
+
+                <thead>
+                    <tr class="bg-[#d4a017] text-white text-left">
+                    <th class="p-2 border border-gray-800">Produit</th>
+                    <th class="p-2 border border-gray-800">Designation</th>
+                    <th class="p-2 border border-gray-800">Quantité</th>
+                    <!-- <th class="p-2 border border-gray-800">Unité</th> -->
+                    <th class="p-2 border border-gray-800">Prix TTC</th>
+                    <th class="p-2 border border-gray-800">Total TTC</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y">
+
+                    <!-- Repeated rows matching PDF -->
+                    <tr class="border border-gray-800">
+                    <td class="border border-gray-800" style="height: 105mm;">
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td class="border border-gray-800">
+                        {% for i in items %}
+                        {{i.product.car}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td class="border border-gray-800">
+                        {% for i in items %}
+                        {{i.qty}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td class="border border-gray-800">
+                        {% for i in items %}
+                        {{i.price}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <!-- style="height: 150mm;" <td class="border border-gray-800">
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
                     </td> -->
-                  <td style="height: 190mm;white-space: nowrap;padding-left:3px">
-                      {% for v in i %}
-                        {{v.product.car.upper|slice:"50"}}
-                        {% if not forloop.counter == i|length %}<br>{% endif %}
-                      {% endfor %}
-                  </td>
-                  <td class="text-center">
-                    {% for v in i %}
-                    {{v.qty}}
-                    {% if not forloop.counter == i|length %}<br>{% endif %}
-                    {% endfor %}
-                  </td>
-                  <td class="text-center">
-                    {% for v in i %}
-                    {{v.price|floatformat:2|intspace}}
-                    {% if not forloop.counter == i|length %}<br>{% endif %}
-                    {% endfor %}
-                  </td>
-                  <!-- <td class="text-center">
-                    {% for v in i %}
-                    {{v.remise}}%
-                    {% if not forloop.counter == i|length %}<br>{% endif %}
-                    {% endfor %}
-                  </td> -->
-                  <td class="text-center">
-                    {% for v in i %}
-                    {{v.total|floatformat:2|intspace}}
-                    {% if not forloop.counter == i|length %}<br>{% endif %}
-                    {% endfor %}
-                  </td>
-
+                    <td class="border border-gray-800" class="font-semibold">
+                        {% for i in items %}
+                        {{i.total}}
+                        <br>
+                        {%endfor%}
+                    </td>
                 </tr>
-        </tbody>
-        <tfoot class="text-center">
 
-        </tfoot>
-      </table>
 
-    </div>
+                </tbody>
 
-    <div class="text-center">
-      <table class="table table-bordered" style="margin-bottom: 35px;">
-        <tr style="font-size: 10px;
-        font-weight: 800;border: 1px solid">
-          <td colspan="10">
-            <strong style="font-size: 13px" >
-              Total
-            </strong>
-          </td>
+            </table>
 
-          <td>
-            <strong class="ttcgc{{devis.id}}" style="font-size: 15px">
-              {{devis.total|floatformat:2|intspace}}
-            </strong>
-          </td>
-        </tr>
-      </table>
-      
-    </div>
-    {{user.retailer_user.retailer.name}} {{user.retailer_user.retailer.address}}<br>TEL: {{user.retailer_user.retailer.phone}} ICE: {{user.retailer_user.retailer.ice}} IF:{{user.retailer_user.retailer.id_fiscal}} TP:{{user.retailer_user.retailer.tp}}
-  </div>
-  {% else %}
-  <div class="postion-relative px-5 facture{{devis.id}}holder p-3" style="min-height: 29.7cm;width: 21cm; border:1px solid;">
+        </section>
 
-    <div class="border p-2 text-center">
-      {{user.retailer_user.retailer.name}}
-    </div>
-    <!-- facture header -->
-    <div class="">
-        <div class="d-flex justify-content-between">
-          <div>
-            <div
-              >Facture N°: <strong>{{devis.devis_no}}</strong>
+        <!-- Totals -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            
+
+
+
+
+            <div class="flex justify-between items-center border mt-2">
+            <span class="bg-[#d4a017] text-white px-3 py-1 font-semibold">
+            LE TOTAL : 
+            </span>
+
+            <span class="px-4 font-bold">
+            {{bon.total}}
+            </span>
+
             </div>
+
+            </div>
+
+        </section>
+
+        <footer class="text-center text-xs mt-12 border-t pt-4">
+
+            <p>
+            SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088
+            </p>
+
+            <p>
+            5 BD ABDELLAH BEN YASSINE IMM BELLEDONNE ETAGE 5 N°5, CASABLANCA
+            </p>
+
+            <p>
+            E-mail: Faris.sasauto@gmail.com -- Tel : 0660638487 / 0633151635
+            </p>
+
+        </footer>
+
+        <div class="h-3 bg-[#d4a017] mt-10"></div>
+
+    </main>
+
+    {% else %}
+    <main class="max-w-5xl mx-auto bg-gray-100 border border-gray-500 p-10" style="height: 297mm;">
+
+        <!-- Top gold bar -->
+        <div class="h-3 bg-[#d4a017] mb-8"></div>
+
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+
+            <!-- Logo -->
+            <div class="w-64">
+            <img 
+            src="{%if user.retailer_user.retailer.logo%}{{user.retailer_user.retailer.logo.url}}{%endif%}"
+            alt="Logo SAS AUTO - Service Automobile Spécialisé"
+            class="w-full h-auto"
+            loading="lazy"
+            style="width: 115px;"
+            />
+            <!-- Logo placeholder due to unknown licensing in source PDF -->
+            </div>
+
+            <h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
+            DEVIS
+            </h1>
+
+        </header>
+
+        <hr class="my-6 border-gray-400">
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+            <!-- Left meta -->
             <div>
-              Date: <strong>{{devis.date|date:"d/m/Y"}}</strong>
+                <ul class="text-sm space-y-1">
+                    <li><strong>Date de bon :</strong>{{bon.date|date:"d/m/Y"}}</li>
+                    <!-- <li><strong>N° de BC :</strong> {{bon.boncommande}}</li> -->
+                    <!-- <li><strong>N° de BL :</strong> {{bon.receipt_no}}</li> -->
+                </ul>
+
+                <div class="text-sm leading-relaxed">
+
+                    <p class="font-semibold">SAS AUTO</p>
+
+                    <p>
+                    5 BD ABDELLAH BEN YASSINE<br>
+                    IMM BELLEDONNE ETAGE 5 N°5<br>
+                    CASABLANCA
+                    </p>
+
+                    <p>
+                    Faris.sasauto@gmail.com
+                    </p>
+
+                    <p>
+                    0660638487 / 0633151635
+                    </p>
+
+                </div>
+
             </div>
-          </div>
-          <div>
-            <div>
-              cleint: <strong>{{devis.customer.customer_name.upper}}</strong>
+
+            <!-- Right meta -->
+            <div class="text-sm">
+
+                <p class="text-xl font-semibold mb-4">
+                Devis N° : {{bon.devis_no}}
+                </p>
+
+                <ul class="space-y-1">
+                    <li>Client: {{bon.client.customer_name}}</li>
+                    {% if bon.client.ice %}<li>ICE: {{bon.client.ice}}</li>{%endif%}
+                    <!-- <li>Immatriculation: {%if bon.note %}{{bon.note}}{%endif%}</li> -->
+                    <!-- <li>#N/A</li>
+                    <li>#N/A</li>
+                    <li>#N/A</li> -->
+                </ul>
+
             </div>
-            <div class="">
-              ICE: <strong>
-                 {{devis.customer.ice}}
-              </strong>
-            </div>
 
-          </div>
-        </div>
+        </section>
 
+        <!-- Table -->
+        <section >
+            <table class="w-full border-collapse text-sm table-striped border border-gray-800">
 
-    </div>
+                <thead>
+                    <tr class="bg-[#d4a017] text-white text-left">
+                    <th class="p-2 border border-gray-800">Produit</th>
+                    <th class="p-2 border border-gray-800">Designation</th>
+                    <th class="p-2 border border-gray-800">Quantité</th>
+                    <!-- <th class="p-2 border border-gray-800">Unité</th> -->
+                    <th class="p-2 border border-gray-800">Prix TTC</th>
+                    <th class="p-2 border border-gray-800">Total TTC</th>
+                    </tr>
+                </thead>
 
-    <!-- facture items -->
-    <div class="orderitems mt-3 bg-white rounded p-2 position-relative">
+                <tbody class="divide-y">
 
-      <table class="table table-bordered fcitems" style="border-color: black;font-family: serif; font-size:13px;">
-        <thead style="font-size: 10px;
-        font-weight: 800;" class="text-center">
-          <tr>
-            <!-- <td style="width: 19%;">Ref</td> -->
-            <td style="width: 35%;">Designation</td>
-            <td style="width: 9%;">Qté</td>
-            <td style="width: 14%;">P.U</td>
-            <!-- <td style="width: 5%;">Rem</td> -->
-            <td style="width: 16%">Mantant</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-              <!-- <td style="height: 150mm;padding-left:3px">
-                {% for v in i %}
-                {{v.product.ref.upper}} {{i.id}}
-                {% if not forloop.counter == i|length %}<br>{% endif %}
-                {% endfor %}
-              </td> -->
-            <td style="height: 190mm;white-space: nowrap;padding-left:3px">
-                {% for v in i %}
-                  {{v.product.car.upper|slice:"50"}}
-                  {% if not forloop.counter == i|length %}<br>{% endif %}
-                {% endfor %}
-            </td>
-            <td class="text-center">
-              {% for v in i %}
-              {{v.qty}}
-              {% if not forloop.counter == i|length %}<br>{% endif %}
-              {% endfor %}
-            </td>
-            <td class="text-center">
-              {% for v in i %}
-              {{v.price|floatformat:2|intspace}}
-              {% if not forloop.counter == i|length %}<br>{% endif %}
-              {% endfor %}
-            </td>
-            <!-- <td class="text-center">
-              {% for v in i %}
-              {{v.remise}}%
-              {% if not forloop.counter == i|length %}<br>{% endif %}
-              {% endfor %}
-            </td> -->
-            <td class="text-center">
-              {% for v in i %}
-              {{v.total|floatformat:2|intspace}}
-              {% if not forloop.counter == i|length %}<br>{% endif %}
-              {% endfor %}
-            </td>
-
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- facture footer -->
-
-    <div class="text-center" style="font-size:11px">
-
-      {{user.retailer_user.retailer.name}} {{user.retailer_user.retailer.address}}<br>TEL: {{user.retailer_user.retailer.phone}} ICE: {{user.retailer_user.retailer.ice}} IF:{{user.retailer_user.retailer.id_fiscal}} TP:{{user.retailer_user.retailer.tp}}
-    </div>
-
-  </div>
-  {% endif %}
-  {% endfor %}
-
-</div>
+                    <!-- Repeated rows matching PDF -->
+                    <tr class="border border-gray-800">
+                    <td class="border border-gray-800" style="height: 105mm;">
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td class="border border-gray-800">
+                        {% for i in items %}
+                        {{i.product.car}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td class="border border-gray-800">
+                        {% for i in items %}
+                        {{i.qty}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <td class="border border-gray-800">
+                        {% for i in items %}
+                        {{i.price}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                    <!-- style="height: 150mm;" <td class="border border-gray-800">
+                        {% for i in items %}
+                        {{i.product.ref}}
+                        <br>
+                        {%endfor%}
+                    </td> -->
+                    <td class="border border-gray-800" class="font-semibold">
+                        {% for i in items %}
+                        {{i.total}}
+                        <br>
+                        {%endfor%}
+                    </td>
+                </tr>
 
 
-<script>
+                </tbody>
 
-    function entete(){
-      if ($('.factureheader').hasClass('show')) {
-        $('.factureheader').removeClass('show')
-        $('.factureheader').css('visibility', 'hidden')
-        $('.bgfacture').removeClass('show')
-        $('.bgfacture').css('visibility', 'hidden')
-        localStorage.setItem('showentete', false)
-      }
-      else{
-        $('.factureheader').addClass('show')
-        $('.factureheader').css('visibility', 'visible')
-        $('.bgfacture').addClass('show')
-        $('.bgfacture').css('visibility', 'visible')
-        localStorage.setItem('showentete', true)
-      }
+            </table>
 
-    }
-    showentete=localStorage.getItem('showentete')||true
-    if (showentete == 'true') {
-      $('.factureheader').addClass('show')
-      $('.factureheader').css('visibility', 'visible')
-      $('.bgfacture').addClass('show')
-      $('.bgfacture').css('visibility', 'visible')
-    }
-    else{
-      $('.factureheader').removeClass('show')
-      $('.factureheader').css('visibility', 'hidden')
-      $('.bgfacture').removeClass('show')
-      $('.bgfacture').css('visibility', 'hidden')
-    }
-    function separateThousands(number) {
-      console.log(number)
-    // Split the number into integer and decimal parts
-      const parts = number.toString().split('.');
-      const integerPart =  parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        </section>
 
-      if (parts[1]) {
-        decimalpart=Number(parts[1]).toFixed(2)
-        return integerPart + '.' + parts[1];
-      } else {
-        return Number(integerPart).toFixed(2);
-      }
-  }
-    /*$('.ttcgc{{devis.id}}').text(separateThousands('{{devis.total|floatformat:2|intspace}}'))
-    $('.tvafc{{devis.id}}').text(separateThousands({{tva|floatformat:2|intspace}}))
-    $('.htfc{{devis.id}}').text(separateThousands({{ht|floatformat:2|intspace}}))*/
-     $('.totalfactureprint').text($.spellingNumber('{{devis.total|floatformat:2}}', {
-      lang:'fr',
-      wholesUnit:"Dirhams",
-      fractionUnit:"Centimes",
-      digitsLengthW2F: 2,
-      decimalSeperator:"et"
+        <!-- Totals -->
+        
 
-    }).toUpperCase())
-</script>
+        <footer class="text-center text-xs mt-12 border-t pt-4">
+
+            <p>
+            SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088
+            </p>
+
+            <p>
+            5 BD ABDELLAH BEN YASSINE IMM BELLEDONNE ETAGE 5 N°5, CASABLANCA
+            </p>
+
+            <p>
+            E-mail: Faris.sasauto@gmail.com -- Tel : 0660638487 / 0633151635
+            </p>
+
+        </footer>
+
+        <div class="h-3 bg-[#d4a017] mt-10"></div>
+
+    </main>
+    {%endif%}
+{%endfor%}
 </body>
 </html>
