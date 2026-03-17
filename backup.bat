@@ -32,3 +32,5 @@ scp "%BACKUP_FILE%" user@167.71.77.64:/home/yurey/ilhamcasabackupfolder
 echo Remote copy completed.
 
 endlocal
+
+pause
