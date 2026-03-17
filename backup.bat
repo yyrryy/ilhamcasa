@@ -19,7 +19,7 @@ set BACKUP_FILE=%BACKUP_DIR%\backup.sql
 echo Backing up database %DATABASE_NAME%...
 
 :: Set PGPASSFILE environment variable to point to .pgpass file
-set PGPASSFILE=C:\Utilisateurs\USER\Documents\pgpass.conf
+set PGPASSFILE=C:\Users\Public\pgpass.conf
 
 "C:\bin\pg_dump.exe" -h localhost -U %USER% -b -v -f "%BACKUP_FILE%" %DATABASE_NAME%
 
@@ -32,5 +32,3 @@ scp "%BACKUP_FILE%" user@167.71.77.64:/home/yurey/ilhamcasabackupfolder
 echo Remote copy completed.
 
 endlocal
-
-pause
