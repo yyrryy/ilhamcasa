@@ -3750,6 +3750,10 @@ def deletereglsupp(request):
     reglid=request.GET.get('reglid')
     regl=PaymentSupplier.objects.get(pk=reglid)
     supplier=regl.supplier
+    bon = regl.bon
+    if bon:
+        bon.paid_amount -= float(regl.amount)
+        bon.save()
     supplier.rest=float(supplier.rest)+float(regl.amount)
     supplier.save()
     regl.delete()
@@ -4460,6 +4464,33 @@ def addpaymentbon(request):
     return JsonResponse({
         'success':True
         })
+
+
+def addpaymentbonachat(request):
+    amount=request.GET.get('amount')
+    mode=request.GET.get('mode')
+    npiece=request.GET.get('npiece')
+    echeance=request.GET.get('echeance') or None
+    bonid=request.GET.get('bonid')
+    bon=Itemsbysupplier.objects.get(pk=bonid)
+    supplier=bon.supplier
+    bon.paid_amount=float(bon.paid_amount)+float(amount)
+    bon.save()
+    pay=PaymentSupplier.objects.create(
+        supplier=supplier,
+        amount=float(amount),
+        mode=mode,
+        npiece=npiece,
+        bon=bon,
+        date=timezone.now().date()
+    )
+    if echeance:
+        pay.echeance=echeance
+        pay.save()
+    return JsonResponse({
+        'success':True
+    })
+
 
 def addpaymentfacture(request):
     amount=request.GET.get('amount')

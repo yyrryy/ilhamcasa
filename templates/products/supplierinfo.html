@@ -216,14 +216,16 @@
                             {% endif %}
                             <td>
                                 {% if bon.mode == 'espece' %}
-                                --
+                                --h
                                 {% else %}
                                 {{bon.echeance|date:'d/m/Y'}}
                                 {% endif %}
-                                <button class="btn btn-danger d-none deletereglsupp{{bon.id}}" onclick="$('.confirmdeleteregl').toggleClass('d-none')"></button><br>
-                                <div class="confirmdeleteregl d-none">
-                                    Supprimer ?
-                                    <button onclick="$('.confirmdeleteregl , .deletereglsupp{{bon.id}}').toggleClass('d-none')">Non</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger deletereglsupp{{bon.id}}" onclick="$('.confirmdeleteregl{{bon.id}}').toggleClass('d-none')">supprimer</button><br>
+                                <div class="confirmdeleteregl{{bon.id}} d-none">
+                                    Confirmer ?
+                                    <button onclick="$('.confirmdeleteregl').toggleClass('d-none')">Non</button>
                                     <button onclick="deletereglsupp('{{bon.id}}')">OUI</button>
                                 </div>
                             </td>

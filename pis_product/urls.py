@@ -41,6 +41,7 @@ urlpatterns = [
     re_path(r'^listfactures/',views.listfactures, name='listfactures'),
     re_path(r'^deviview/',views.deviview, name='deviview'),
     re_path(r'^addpaymentbon/',views.addpaymentbon, name='addpaymentbon'),
+    re_path(r'^addpaymentbonachat/',views.addpaymentbonachat, name='addpaymentbonachat'),
     re_path(r'^clientprice/',views.clientprice, name='clientprice'),
     re_path(r'^getpdctins/',views.getpdctins, name='getpdctins'),
     re_path(r'^getpdctouts/',views.getpdctouts, name='getpdctouts'),

@@ -59,18 +59,21 @@
 <!-- bon articles -->
 
     <div class="border rounded row">
-        <div class="col-2">
+        <div class="bg-white col-2">
             <h5>
-                Bon Sortie #{{nbon}}
+                Bon Livraison #{{nbon}}
             </h5>
             <div class="alert alert-danger text-center item-error" style="display: none;" role="alert">
             </div>
-            <div>
+            <div class="bg-dark text-white p-2 rounded mt-2">
                 Prix client: <strong class="clientprice"></strong>
-                Sold client: <strong class="soldclient"></strong>
+                
+            </div>
+            <div class="bg-dark text-white p-2 rounded mt-2">
+                <strong>Sold client:</strong> <strong class="soldclient"></strong>
             </div>
             <div class="mt-3 d-flex flex-column">
-                <select class="form-selsect select2 customer clientselectbl " name="customer" id="customer">
+                <select class="form-selsect customer clientselectbl " name="customer" id="customer">
                     <option value="0">
                         Client
                     </option>
@@ -88,22 +91,41 @@
                 <div class="mt-2">
                     <small>Date bon</small>
                     <input type="date" name="datebon" placeholder="Date" value="{{present_date|date:'Y-m-d'}}" class="form-control datebon">
-                    <input type="time" name="timebon" placeholder="Date" value="{{present_date|date:'Y-m-d'}}" class="form-control timebon">
+                    <!-- <input type="time" name="timebon" placeholder="Date" value="{{present_date|date:'H:i'}}" class="form-control timebon"> -->
+                </div>
+                <div class="mt-2">
+                    <!-- note -->
+                    <small>Note</small>
+                    <textarea name="note" class="form-control note" placeholder="Note"></textarea>
                 </div>
             </div>
+            <div class="rounded p-2">
+            </div>
+            
             
         </div>
-        <div id="item-data-sc" class="table-responsive item-data-sc col-10">
+        <div id="item-data-sc" class="col-10">
             <div class="d-flex justify-content-between bg-white">
     
-                <div class="col-md-6 mb-3 productslistholder position-relative d-none">
-                    <button class="btn btn-success" onclick="$('.addproductholder').removeClass('d-none')">
-                        +
-                    </button>
-                    <strong>
-                        Produits
-                    </strong> <br>
-                    <select name="" id="" class="productslist form-control" style="width: 100%;"></select>
+                <div class="col-md-6 mb-3 productslistholder position-relative  d-none">
+                    <div class="d-flex">
+                        <!-- <button class="btn btn-success" onclick="$('.addproductholder').removeClass('d-none')">
+                            +
+                        </button> -->
+                        <div class="col-6">
+                            <select name="" id="" class="productslist form-control" style="width: 100%;"></select>
+                        </div>
+                        <div class="p-2 col-4 border ms-3">
+                            Prix Gro: <strong class="prixgro"></strong>
+                        </div>
+                        <div class="p-2 col-4 border ms-3">
+                            Prix Comptoir: <strong class="prixcomptoir"></strong>
+                        </div>
+                        <!-- <div class="p-2 col-4 border ms-3">
+                            Prix magazin: <strong class="prixmagazin"></strong>
+                        </div> -->
+                            
+                    </div>
                     <!-- <div class="mt-3 row">
                         <div class="col-3">
                             Qty
@@ -139,15 +161,14 @@
     
                 </div>
             </div>
-            <div style="height: 60vh; overflow: scroll; position: relative;">
+            <div style="height: 70vh; overflow: scroll; position: relative;">
                 <table class="table table-bordered bg-white mt-2">
                     <thead>
                     <tr class="">
                         <th style="width: 45%;">Article</th>
-                        <th>Stock</th>
-                        <th>Prix acht</th>
-                        <th>Prix ventes</th>
+                        <!-- <th>Prix acht</th> -->
                         <th>Quantité</th>
+                        <th>Prix ventes</th>
                         <th>Total</th>
                         <th></th>
                     </tr>
@@ -160,8 +181,6 @@
                                     {{i.product.ref}} - {{i.product.car}}
                                 </strong>
                             </td>
-                            <td class="stock">{{i.product.stock}}</td>
-                            <td class="prachat">{{i.product.pr_achat}}</td>
                             <td><input type="hidden" class="prnet" value={{i.product.prnet}}><input min={{i.product.prnet}} value={{i.price}} class="form-control price" placeholder="Price" type="number" ><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: {{i.product.prnet}}</span>
                              </td>
                             <td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value="{{i.qty}}" ></td>
@@ -178,15 +197,19 @@
             <div>
     
                 <div class="borders shadow bg-white p-2 rounded">
-                    <div class="table-responsive d-flex justify-content-between">
+                    <div class="">
                         <table class="table table-bordered">
                             <thead>
                             <tbody>
+                                
                             <tr hidden>
                                 <td></td>
                                 <td></td>
                                 <td class="text-right"><strong>Sub Total</strong></td>
                                 <td><span id="subtotal">0.00</span></td>
+                                <td>
+                                    
+                                </td>
                             </tr>
                             <tr hidden>
                                 <td></td>
@@ -203,30 +226,52 @@
                             <tr>
                                 <!-- <td><strong>Total Qty: </strong><span id="totalQty" style="color: red; font-weight: bold">0</span></td> -->
     
-                                <td class="text-right"><h4>Total: <span id="grandTotal" style="color:red">{{devis.total}}</span></h4> </td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right">
-                                    <strong>Payé</strong>
+                                <td id="grandTotal" style="color:red; font-weight: bold;">{{devis.total}}</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            Mantant <br>
+                                            <input type="number" class="form-control paidamount  me-2" placeholder="mantant">
+                                        </div>
+                                        <div class="col-3">
+                                            Mode <br>
+                                            <select class="form-control mode  me-2">
+                                                <option value="espece">espece</option>
+                                                <option value="cheque">Cheque</option>
+                                                <option value="effet">Effet</option>
+                                                <option value="virement">Virement</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-3">
+                                            N° piece <br>
+                                            <input type="text" class="form-control npiece  me-2" placeholder="N° piece">
+                                        </div>
+                                        <div class="col-3">
+                                            Echeance <br>
+                                            <input type="date" class="form-control echeance  me-2" placeholder="mantant">
+                                        </div>
+                                        
+                                    </div>
                                 </td>
-                                <td class="d-flex">
-                                    
-                                    <input autocomplete="off" class="form-control paidamount" id="paidAmount" value="0" type="number">
-                            </td>
+                                <td>
+                                    <div class="">
+    
+                                        <a id="create-invoice" href="javascript:;" title="Create Invoice" class="btn btn-primary w-100 h-100" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Valider</a>
+                                    </div>
+                                </td>
                             </tr>
+                            
                             <!-- <tr>
                                 <td class="text-right"><strong>Rest</strong></td>
                                 <td><span id="remainingAmount">0</span></td>
                             </tr> -->
     
                             </tbody>
+                            
                         </table>
-                        <div class="">
-    
-                            <a id="create-invoice" href="javascript:;" title="Create Invoice" class="btn btn-primary w-100 h-100" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Valider</a>
-                        </div>
+                        
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -252,13 +297,54 @@
     <script type="text/javascript" src="{% static 'js/jquery.scannerdetection.js' %}"></script>
     <script>
         jQuery().invoice().init
-        // to store items in localstorage
-        pdcts=[]
-        {% for i in items %}
-        pdcts.push({{product.}})
-        {% endfor %}
-        localStorage.setItem('pdctsindevistobon', JSON.stringify(pdcts))
-        console.log('>>', pdcts)
+
+        $(function(){
+
+            $('.clientselectbl').select2({
+
+            ajax: {
+                type:'get',
+                dataType: 'json',
+                url: '/product/searchclient?target=s',
+                data: function (params) {
+                var query = {
+                    term: params.term,
+                }
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+                },
+                proccessresults: function (data) {
+                    return {
+                    results:data.results
+                    }
+                },
+                cache:true
+            },
+            minimumInputLength: 1,
+            placeholder:'Chercher client',
+            templateResult: formatclient,
+            templateSelection: formatclientSelection,
+            });
+            function formatclient (client) {
+                if (client.loading) {
+                return client.text;
+                }
+
+                var $container = $(
+                `<strong>${client.text}</div>`
+                );
+
+
+
+                return $container;
+            }
+
+            function formatclientSelection (client) {
+                return client.text;
+            }
+
+            })
+
         $('.checkref').on('change', ()=>{
             if ($('[name="ref"]').val()!='' && $('[name="mark"]').val()!='' && $('[name="pcategory"]').val()!=''){
                 console.log('checking')
@@ -284,14 +370,14 @@
         function removeline(event, productid){
             console.log('deletting;;;', productid)
             $(event.target).closest('tr').remove();
-            bonitemsdevistobon=JSON.parse(localStorage.getItem('bonitemsdevistobon'))
-            idsinbon=JSON.parse(localStorage.getItem('pdctsindevistobon'))
+            bonitems=JSON.parse(localStorage.getItem('bonitems'))
+            idsinbon=JSON.parse(localStorage.getItem('pdctsinbonsortie'))
             dx=idsinbon.indexOf(productid)
             idsinbon.splice(dx, 1)
-            bonitemsdevistobon.splice(dx, 1)
-            console.log(dx, idsinbon, bonitemsdevistobon)
-            localStorage.setItem('bonitemsdevistobon', JSON.stringify(bonitemsdevistobon))
-            localStorage.setItem('pdctsindevistobon', JSON.stringify(idsinbon))
+            bonitems.splice(dx, 1)
+            console.log(dx, idsinbon, bonitems)
+            localStorage.setItem('bonitems', JSON.stringify(bonitems))
+            localStorage.setItem('pdctsinbonsortie', JSON.stringify(idsinbon))
         }
         function saverow(event){
             tr=$(event.target).parent().parent()
@@ -302,8 +388,8 @@
             price=tr.find('.price').val()?tr.find('.price').val():0
             qty=tr.find('.qty').val()?tr.find('.qty').val():0
             productid=tr.find('.productid').val()
-            bonitemsdevistobon=JSON.parse(localStorage.getItem('bonitemsdevistobon')) || []
-            idsinbon=JSON.parse(localStorage.getItem('pdctsindevistobon'))
+            bonitems=JSON.parse(localStorage.getItem('bonitems')) || []
+            idsinbon=JSON.parse(localStorage.getItem('pdctsinbonsortie'))
             // get index of id
             if (idsinbon){
                 dx=idsinbon.indexOf(productid)
@@ -318,13 +404,13 @@
                 'qty':qty,
                 'productid':productid
             }
-            if (bonitemsdevistobon.length > 0){
-                bonitemsdevistobon[dx]=row
+            if (bonitems.length > 0){
+                bonitems[dx]=row
                 // insert it in index to remain the same order, order is important here
-                localStorage.setItem('bonitemsdevistobon',JSON.stringify(bonitemsdevistobon))
+                localStorage.setItem('bonitems',JSON.stringify(bonitems))
             }else{
-                bonitemsdevistobon.push(row)
-                localStorage.setItem('bonitemsdevistobon',JSON.stringify(bonitemsdevistobon))
+                bonitems.push(row)
+                localStorage.setItem('bonitems',JSON.stringify(bonitems))
 
             }
         }
@@ -334,18 +420,21 @@
                 $('.productslistholder').addClass('d-none')
             }
             else{
-                //$('.productslistholder').removeClass('d-none')
+                $('.productslistholder').removeClass('d-none')
                 // we store olse client id to display it when loading from localstorage
-                //localStorage.setItem('clientdevis', $(this).val())
+                localStorage.setItem('clientbon', $(this).val())
+                $.get('/product/soldclient', {'id': $(this).val()}, (data) => {
+                    $('.soldclient').text(data.sold);
+                });
             }
         })
         // track bons in products
-        // localStorage.setItem('pdctsindevistobon', '[]')
+        // localStorage.setItem('pdctsinbonsortie', '[]')
         // localStorage.setItem('pdctsdetails', '[]')
         $(function(){
             $('.productslist').select2({
                 minimumInputLength: 1,
-                placeholder:'Chercher',
+                placeholder:'Chercher Article',
                 ajax: {
                 type:'get',
                 dataType: 'json',
@@ -369,8 +458,8 @@
         // set products in local storage
         // remove prdcts localstorage when valider
         $('.productslist').on('change', function(){
-          pdcts=JSON.parse(localStorage.getItem('pdctsindevistobon'))||[]
-          bonitemsdevistobon=JSON.parse(localStorage.getItem('bonitemsdevistobon'))||[]
+          pdcts=JSON.parse(localStorage.getItem('pdctsinbonsortie'))||[]
+          bonitems=JSON.parse(localStorage.getItem('bonitems'))||[]
           console.log(pdcts)
 		
           parentdiv=$(this).parent().parent()
@@ -382,9 +471,12 @@
             alertify.error('Deja')
             return
           }
-          $.get('/product/clientprice', {'clientid': $('[name="customer"]').val(), 'productid':id}, (data) => {
-                    $('.clientprice').text(data.price);
-                    thisprice=data.price
+          $.get('/product/getproductdata', {'clientid': $('[name="customer"]').val(), 'id':id}, (data) => {
+                    $('.clientprice').text(data.clientprice);
+                    $('.prixgro').text(data.prixgro);
+                    $('.prixcomptoir').text(data.prixcomptoir);
+                    //$('.prixmagazin').text(data.prixmagazin);
+                    thisprice=data.clientprice
                     row={
                 'article':ref+' - '+car,
                 'stock':stock,
@@ -400,9 +492,9 @@
             // get index of id
 
 
-            bonitemsdevistobon[dx].qty=parseInt(bonitemsdevistobon[dx].qty)+1
+            bonitems[dx].qty=parseInt(bonitems[dx].qty)+1
             // insert it in index to remain the same order, order is important here
-            localStorage.setItem('bonitemsdevistobon',JSON.stringify(bonitemsdevistobon))
+            localStorage.setItem('bonitems',JSON.stringify(bonitems))
 
             let qtyinput=$(`#itemrow${id}`).find('.qty')
             let total=$(`#itemrow${id}`).find('.total')
@@ -417,14 +509,14 @@
             return
           }
           pdcts.push(id)
-          localStorage.setItem('pdctsindevistobon', JSON.stringify(pdcts))
+          localStorage.setItem('pdctsinbonsortie', JSON.stringify(pdcts))
           // add it to items localstorage
-          console.log(bonitemsdevistobon)
-          bonitemsdevistobon.push(row)
-          localStorage.setItem('bonitemsdevistobon',JSON.stringify(bonitemsdevistobon))
+          console.log(bonitems)
+          bonitems.push(row)
+          localStorage.setItem('bonitems',JSON.stringify(bonitems))
             //let thisprice=0
-            
-            $('.itemsbon').prepend(`<tr class="item-row" id="itemrow${id}""><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${ref} - ${car}</strong></td><td class="stock ${stock==0 ? "bg-danger text-white" : ""}">${stock}</td><td class="prachat">${pr_achat}</td><td><input type="hidden" class="prnet" value=${prnet}><input min=${prnet} value=${thisprice} class="form-control price" placeholder="Price" type="number" ><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${prnet}</span> </td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value=0 ></td><td class="total"></td><input type="hidden" class="productid" value=${id}><td><i class="btn btn-danger delete" title="Supprimer" productid="${id}" onclick="removeline(event, '${id}')"></i></td></tr>`);
+            // prix achat <td class="prachat">${pr_achat}</td>
+            $('.itemsbon').append(`<tr class="item-row" id="itemrow${id}""><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${ref} - ${car}</strong></td><td class="stock ${stock==0 ? "bg-danger text-white" : ""}">${stock}</td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value=0 oninput="saverow(event)"></td><td><input type="hidden" class="prnet" value=${prnet}><input min=${prnet} value=${thisprice} class="form-control price" placeholder="Price" type="number" oninput="saverow(event)"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${prnet}</span> </td><td class="total"></td><input type="hidden" class="productid" value=${id}><td><i class="btn btn-danger delete" title="Supprimer" productid="${id}" onclick="removeline(event, '${id}')"></i></td></tr>`);
 
                 jQuery().invoice().init
         
@@ -460,7 +552,8 @@
                 prachat=el.attr('prachat')
                 price=el.attr('price')
                 prnet=el.attr('prnet')
-                $('.itemsbon').append(`<tr class="item-row "><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${item}</strong></td><td class="stock ${stock==0 ? "bg-danger text-white" : ""}">${stock}</td><td class="prachat">${prachat}</td><td><input min=${prnet} value=${prachat} class="form-control price" placeholder="Price" type="number"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${prnet}</span> </td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value="0"></td><td><span class="total">0</span></td><input type="hidden" class="productid" value=${id}><td><i class="btn btn-danger delete" title="Supprimer">X</i></td></tr>`);
+                // pr achat <td class="prachat">${prachat}</td>
+                $('.itemsbon').append(`<tr class="item-row "><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${item}</strong></td><td class="stock ${stock==0 ? "bg-danger text-white" : ""}">${stock}</td><td><input min=${prnet} value=${prachat} class="form-control price" placeholder="Price" type="number"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${prnet}</span> </td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value="0"></td><td><span class="total">0</span></td><input type="hidden" class="productid" value=${id}><td><i class="btn btn-danger delete" title="Supprimer">X</i></td></tr>`);
                 $('.delete').on('click', function () {
                     $(this).closest('tr').remove();
                 });
@@ -511,11 +604,12 @@
     })
     $(document).ready(function () {
 
-        bonitemsdevistobon=JSON.parse(localStorage.getItem('bonitemsdevistobon'))||[]
-        if (bonitemsdevistobon.length>0){
-            $('[name="customer"]').select2().val(localStorage.getItem('clientdevis')).trigger('change')
-            for (i of bonitemsdevistobon){
-                $('.itemsbon').append(`<tr class="item-row" id="itemrow${i.productid}""><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${i.article}</strong></td><td class="stock ${i.stock==0 ? "bg-danger text-white" : ""}">${i.stock}</td><td class="prachat">${i.prachat}</td><td><input type="hidden" class="prnet" value=${i.prnet}><input min=${i.prnet} value=${i.price} class="form-control price" placeholder="Price" type="number" ><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${i.prnet}</span> </td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value="${i.qty}" ></td><td class="total">${i.qty*i.price}</td><input type="hidden" class="productid" value=${i.productid}><td><i class="btn btn-danger delete" title="Supprimer" productid="${i.productid}" onclick="removeline(event, '${i.productid}')"></i></td></tr>`);
+        bonitems=JSON.parse(localStorage.getItem('bonitems'))||[]
+        if (bonitems.length>0){
+            $('[name="customer"]').select2().val(localStorage.getItem('clientbon')).trigger('change')
+            // prachat <td class="prachat">${i.prachat}</td>
+            for (i of bonitems){
+                $('.itemsbon').append(`<tr class="item-row" id="itemrow${i.productid}""><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${i.article}</strong></td><td class="stock ${i.stock==0 ? "bg-danger text-white" : ""}">${i.stock}</td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value="${i.qty}" oninput="saverow(event)"></td><td><input type="hidden" class="prnet" value=${i.prnet}><input min=${i.prnet} value=${i.price} class="form-control price" placeholder="Price" type="number" oninput="saverow(event)"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${i.prnet}</span> </td><td class="total">${i.qty*i.price}</td><input type="hidden" class="productid" value=${i.productid}><td><i class="btn btn-danger delete" title="Supprimer" productid="${i.productid}" onclick="removeline(event, '${i.productid}')"></i></td></tr>`);
 
                 jQuery().invoice().init
             }
@@ -580,25 +674,20 @@
         })
 
         $(function () {
-
-
-
-
-
             $('#create-invoice').on('click', function () {
                 const allErrorDivsHaveDNone = $('.errorprice').toArray().every(function(div) {
                     return $(div).hasClass('d-none');
                 });
-                if (!allErrorDivsHaveDNone) {
-                    showerror('Prix de vent doit etre superieur ou egal a prix net');
-                    return;
-                }
+                // if (!allErrorDivsHaveDNone) {
+                //     showerror('Prix de vent doit etre superieur ou egal a prix net');
+                //     return;
+                // }
                 if ($('#item-name').hasClass('item-name') == false || $('select[name="customer"]').val()==0 || $('.datebon').val()=="" || $('.timebon').val()=="") {
                     showerror('Remplir les champs');
                     return;
                 }
 
-                if (($.inArray(true, $('.price').map((t, i)=>$(i).val()=="")) !== -1)||($.inArray(true, $('.qty').map((t, i)=>$(i).val()=="")) !== -1) || ($.inArray(true, $('.price').map((t, i)=>$(i).val()==0)) !== -1)||($.inArray(true, $('.qty').map((t, i)=>$(i).val()==0)) !== -1)) {
+                if (($.inArray(true, $('.price').map((t, i)=>$(i).val()=="")) !== -1)||($.inArray(true, $('.qty').map((t, i)=>$(i).val()=="")) !== -1) || ($.inArray(true, $('.qty').map((t, i)=>$(i).val()==0)) !== -1)) {
 
                     showerror('املئ خانة الثمن');
                     $('.price').css('border-color', 'red');
@@ -636,6 +725,7 @@
                 var datebon=$('[name="datebon"]').val()
                 var timebon=$('[name="timebon"]').val()
                 var customer_value = $('.customer').val();
+                var note = $('.note').val();
                 var customer_id = $('select[name="customer"]').val();
 
                 const itemIds = items.map(item => item.item_id);
@@ -645,9 +735,20 @@
                 alert("منتوجات متكررة");
                 } else {
                 $('#create-invoice').addClass('disabled')
+                amount=$('.paidamount').val()
+                mode=$('.mode').val()
+                npiece=$('.npiece').val()
+                echeance=$('.echeance').val()
                 console.log("sending");
                 $.post("{% url 'sales:generate_invoice_api' %}", {
+                    "devis_number": "{{devis.devis_no}}",
+                    "devis_id": "{{devis.id}}",
+                        mode: mode,
+                        npiece: npiece,
+                        echeance: echeance,
+                        amount: amount,
                         datebon:datebon,
+                        note:note,
                         timebon:timebon,
                         customer_id: customer_id,
                         sub_total: sub_total,
@@ -662,9 +763,9 @@
                         returned_cash: returned_cash,
                         items: JSON.stringify(items)
                     }, function (result, status) {
-                        localStorage.removeItem('bonitemsdevistobon')
-                        localStorage.removeItem('pdctsindevistobon')
-                        localStorage.removeItem('clientdevis')
+                        localStorage.removeItem('bonitems')
+                        localStorage.removeItem('pdctsinbonsortie')
+                        localStorage.removeItem('clientbon')
                         //window.location.href = `/ledger/customer/${$('select[name="customer"]').val()}/ledger/details/`;/sales/bon/1
                         window.location.href = `/sales/bon/${result.invoice_id}`
                         //

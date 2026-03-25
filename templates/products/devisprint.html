@@ -7,7 +7,7 @@
 <title>Devis - SAS AUTO</title>
 
 <!-- Tailwind CDN (for demonstration; production should compile JIT build) -->
-<script src="https://cdn.tailwindcss.com"></script>
+<script src="/static/css/tailwind.css"></script>
 
 <!--
 Font substitution due to unknown licensing in source PDF.
@@ -62,7 +62,7 @@ page-break-after: always;
             <!-- Left meta -->
             <div>
                 <ul class="text-sm space-y-1">
-                    <li><strong>Date de bon :</strong>{{bon.date|date:"d/m/Y"}}</li>
+                    <li><strong>Date: </strong>{{bon.date|date:"d/m/Y"}}</li>
                     <!-- <li><strong>N° de BC :</strong> {{bon.boncommande}}</li> -->
                     <!-- <li><strong>N° de BL :</strong> {{bon.receipt_no}}</li> -->
                 </ul>
@@ -249,7 +249,7 @@ page-break-after: always;
             <!-- Left meta -->
             <div>
                 <ul class="text-sm space-y-1">
-                    <li><strong>Date de bon :</strong>{{bon.date|date:"d/m/Y"}}</li>
+                    <li><strong>Date: </strong>{{bon.date|date:"d/m/Y"}}</li>
                     <!-- <li><strong>N° de BC :</strong> {{bon.boncommande}}</li> -->
                     <!-- <li><strong>N° de BL :</strong> {{bon.receipt_no}}</li> -->
                 </ul>

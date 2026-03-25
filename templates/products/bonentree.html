@@ -2,7 +2,7 @@
     <!-- <a href="{% url 'product:createavoirsupp' id=bon.id %}" class="btn btn-info">
         Avoir
     </a> -->
-    <div class="bg-white rounded shadow p-2">
+    <div class="bg-white rounded p-2">
         <h4 class="mb-3 p-2">
             BON ENTREE N° {{bon.nbon}}
         </h4> 
@@ -48,9 +48,9 @@
             
            
             
-            <div class="">
+            <!-- <div class="">
                 <input type="text" class="form-control search-invoice" placeholder="Rechercher " data-catgoryid="1">
-            </div>
+            </div> -->
             <thead>
             <tr>
                 <th><i class="fa fa-bullhorn"></i>
@@ -86,7 +86,40 @@
     </div>
     
 </div>
-
+{% if bon.paid_amount > 0 %}
+    <h1 class="bg-dark p-2 rounded text-white">
+        Mantant Payé: {{bon.paid_amount}}
+    </h1>
+{% endif %}
+</div>
+{% if not bon.paid_amount >= bon.total %}
+<div class="mt-5 rounded bg-white row">
+    <strong> ajouter payment de bon achat</strong><br>
+    <div class="col-3">
+        Mantant <br>
+        <input type="number" class="form-control paidamount  me-2" placeholder="mantant">
+    </div>
+    <div class="col-3">
+        Mode <br>
+        <select class="form-control mode  me-2">
+            <option value="espece">espece</option>
+            <option value="cheque">Cheque</option>
+            <option value="effet">Effet</option>
+            <option value="virement">Virement</option>
+        </select>
+    </div>
+    <div class="col-3">
+        N° piece <br>
+        <input type="text" class="form-control npiece  me-2" placeholder="N° piece">
+    </div>
+    <div class="col-3">
+        Echeance <br>
+        <input type="date" class="form-control echeance  me-2" placeholder="mantant">
+    </div>
+    <button onclick="addpaymentbonachat(event, '{{bon.id}}')" class="btn btn-primary w-
+    100 mt-3">Ajouter</button>
+</div>
+{% endif %}
 <!-- <div class="mb-3">
     <div class="bg-white rounded shadow p-2">
         <div class="accordion" id="accordionExample">

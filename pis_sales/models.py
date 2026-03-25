@@ -50,7 +50,8 @@ class SalesHistory(DatedModel):
     sub_total = models.DecimalField(
         max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
-
+    boncommande_number = models.CharField(max_length=100, blank=True, null=True, default=None)
+    devis_number = models.CharField(max_length=100, blank=True, null=True, default=None)
     paid_amount = models.DecimalField(
         max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )

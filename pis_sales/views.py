@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import FormView, DeleteView, View, TemplateView, ListView
 from django.utils import timezone
 from django.urls import reverse, reverse_lazy
-from pis_product.models import PaymentClient, Product, Category, PurchasedProduct, StockOut, StockIn, Returned, Clientprice, Mark, Facture, Outfacture
+from pis_product.models import PaymentClient, Product, Category, PurchasedProduct, StockOut, StockIn, Returned, Clientprice, Mark, Facture, Outfacture, Devis
 from pis_sales.models import SalesHistory, Avoir
 from pis_product.forms import PurchasedProductForm
 from pis_sales.forms import BillingForm
@@ -428,6 +428,9 @@ class GenerateInvoiceAPIView(View):
         # datebon=datetime.strptime(datebon, '%Y-%m-%d')
         sub_total = self.request.POST.get('sub_total')
         discount = self.request.POST.get('discount')
+        devis_number = self.request.POST.get('devis_number')
+        devis_id = self.request.POST.get('devis_id')
+        boncommande_number = self.request.POST.get('boncommande_number')
         shipping = self.request.POST.get('shipping')
         grand_total = self.request.POST.get('grand_total')
         note = self.request.POST.get('note')
@@ -455,6 +458,8 @@ class GenerateInvoiceAPIView(View):
             billing_form_kwargs = {
                 'created_at':datebon,
                 'datebon':datebon,
+                'devis_number':devis_number,
+                'boncommande_number':boncommande_number,
                 'discount': discount,
                 'grand_total': grand_total,
                 'note': note,
@@ -572,6 +577,10 @@ class GenerateInvoiceAPIView(View):
                     bon=self.invoice,
                     date=datebon
                     )
+            if devis_id:
+                devis=Devis.objects.get(pk=devis_id)
+                devis.bon=self.invoice
+                devis.save()
             customer.save()
             # if self.customer or self.request.POST.get('customer_id'):
             #     ledger_form_kwargs = {

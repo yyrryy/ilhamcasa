@@ -148,8 +148,8 @@
                     <th style="width: 45%;">Article</th>
                     <!-- <th>Stock</th>
                     <th>Prix acht</th> -->
-                    <th>Prix ventes</th>
                     <th>Quantité</th>
+                    <th>Prix ventes</th>
                     <th>Total</th>
                     <th></th>
                 </tr>
@@ -159,7 +159,7 @@
                     <tr class="item-row" id="itemrow{{i.product.id}}">
                         <td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">{{i.product.ref}} - {{i.product.car}}</strong>
                             </td>
-                        <td><input type="hidden" class="prnet" value={{i.prnet}}><input min={{i.product.prnet}} value={{i.price}} class="form-control price" placeholder="Price" type="number" ><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: {{i.product.prnet}}</span> </td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value={{i.quantity}} ></td><td class="total">{{i.purchase_amount}}</td><input type="hidden" class="productid" value={{i.product.id}}><td><i class="btn btn-danger delete" title="Supprimer" productid="{{i.product.id}}" onclick="removeline(event, '{{i.product.id}}')"></i></td></tr>
+                        <td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value={{i.quantity}} ></td><td><input type="hidden" class="prnet" value={{i.prnet}}><input min={{i.product.prnet}} value={{i.price}} class="form-control price" placeholder="Price" type="number" ><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: {{i.product.prnet}}</span> </td><td class="total">{{i.purchase_amount}}</td><input type="hidden" class="productid" value={{i.product.id}}><td><i class="btn btn-danger delete" title="Supprimer" productid="{{i.product.id}}" onclick="removeline(event, '{{i.product.id}}')"></i></td></tr>
                     {%endfor%}
                 </tbody>
             </table>
@@ -405,7 +405,7 @@
           localStorage.setItem('factureitems',JSON.stringify(factureitems))
             //let thisprice=0
             
-            $('.itemsbon').prepend(`<tr class="item-row" id="itemrow${id}""><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${ref} - ${car}</strong></td><td><input type="hidden" class="prnet" value=${prnet}><input min=${prnet} value=${thisprice} class="form-control price" placeholder="Price" type="number" oninput="saverow(event)"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${prnet}</span> </td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value=0 oninput="saverow(event)"></td><td class="total"></td><input type="hidden" class="productid" value=${id}><td><i class="btn btn-danger delete" title="Supprimer" productid="${id}" onclick="removeline(event, '${id}')"></i></td></tr>`);
+            $('.itemsbon').append(`<tr class="item-row" id="itemrow${id}""><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${ref} - ${car}</strong></td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value=0 oninput="saverow(event)"></td><td><input type="hidden" class="prnet" value=${prnet}><input min=${prnet} value=${thisprice} class="form-control price" placeholder="Price" type="number" oninput="saverow(event)"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${prnet}</span> </td><td class="total"></td><input type="hidden" class="productid" value=${id}><td><i class="btn btn-danger delete" title="Supprimer" productid="${id}" onclick="removeline(event, '${id}')"></i></td></tr>`);
 
                 jQuery().invoice().init
         
@@ -496,7 +496,7 @@
         if (factureitems.length>0){
             $('[name="customer"]').select2().val(localStorage.getItem('clientfacture')).trigger('change')
             for (i of factureitems){
-                $('.itemsbon').append(`<tr class="item-row" id="itemrow${i.productid}""><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${i.article}</strong></td><td class="stock ${i.stock==0 ? "bg-danger text-white" : ""}">${i.stock}</td><td class="prachat">${i.prachat}</td><td><input type="hidden" class="prnet" value=${i.prnet}><input min=${i.prnet} value=${i.price} class="form-control price" placeholder="Price" type="number" oninput="saverow(event)"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${i.prnet}</span> </td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value="${i.qty}" oninput="saverow(event)"></td><td class="total">${i.qty*i.price}</td><input type="hidden" class="productid" value=${i.productid}><td><i class="btn btn-danger delete" title="Supprimer" productid="${i.productid}" onclick="removeline(event, '${i.productid}')"></i></td></tr>`);
+                $('.itemsbon').append(`<tr class="item-row" id="itemrow${i.productid}""><td id="item-name" class="item-name"><strong class="invoice-item" id="invoice-item">${i.article}</strong></td><td><input class="form-control qty" placeholder="Quantity" type="number" min=1 value="${i.qty}" oninput="saverow(event)"></td><td><input type="hidden" class="prnet" value=${i.prnet}><input min=${i.prnet} value=${i.price} class="form-control price" placeholder="Price" type="number" oninput="saverow(event)"><br><span class="text-danger errorprice d-none bg-white">Prix de vent doit etre superieur ou egal a prix net: ${i.prnet}</span> </td><td class="total">${i.qty*i.price}</td><input type="hidden" class="productid" value=${i.productid}><td><i class="btn btn-danger delete" title="Supprimer" productid="${i.productid}" onclick="removeline(event, '${i.productid}')"></i></td></tr>`);
 
                 jQuery().invoice().init
             }

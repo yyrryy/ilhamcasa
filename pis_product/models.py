@@ -96,7 +96,7 @@ class PaymentSupplier(models.Model):
     # this is for the case of payment in cash
     iscash=models.BooleanField(default=False)
     note=models.CharField(max_length=1000, default=None, null=True, blank=True)
-
+    bon=models.ForeignKey("Itemsbysupplier", default=None, null=True, blank=True, on_delete=models.SET_NULL)
 
 
 class PaymentClient(models.Model):
@@ -132,6 +132,7 @@ class Itemsbysupplier(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     items = models.TextField(blank=True, null=True, help_text='Quantity and Product name would save in JSON format')
     total = models.DecimalField(max_digits=65, decimal_places=2, default=0.00)
+    paid_amount=models.FloatField(default=0.00)
     nbon = models.CharField(max_length=100, blank=True, null=True)
     #date in bon
     bondate = models.DateTimeField(blank=True, null=True, default=None)
@@ -444,6 +445,10 @@ class Supplierprice(models.Model):
 class Devis(models.Model):
     client=models.ForeignKey(
         'pis_com.Customer', related_name='clientdevis',
+        null=True, blank=True,on_delete=models.SET_NULL
+    )
+    bon=models.ForeignKey(
+        "pis_sales.SalesHistory", related_name='bonofdevis',
         null=True, blank=True,on_delete=models.SET_NULL
     )
     date=models.DateField()

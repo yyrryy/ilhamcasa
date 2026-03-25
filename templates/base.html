@@ -1379,6 +1379,29 @@ table{
       }
     })
   }
+  function addpaymentbonachat(event, bonid){
+    amount=$('.paidamount').val()
+    mode=$('.mode').val()
+    npiece=$('.npiece').val()
+    echeance=$('.echeance').val()
+    if (amount==''||amount==0){
+      alertify.error('Mantant')
+      return
+    }
+    $(event.target).addClass('disabled')
+    $.get('/product/addpaymentbonachat', {
+      'amount':amount,
+      'mode':mode,
+      'mode':mode, 
+      'npiece':npiece,
+      'echeance':echeance,
+      'bonid':bonid
+    }, (data)=>{
+      if (data.success){
+        location.reload()
+      }
+    })
+  }
   
   function addpaymentfacture(event, factureid){
     amount=$('.paidamount').val()

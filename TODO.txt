@@ -21,10 +21,10 @@ factures in supplier history..
 addd note in bon..
 note in update bon..
 update paymrnt date in client history..
-add bon command number in field in bon
-devis generer bon or facture
+reglement bon acht in bon like bon livraison..
+devis generer bon..
+quantity before price in creation facture..
+cadre devis..
 quantity before price in creation devis
-quantity before price in creation facture
-reglement bon acht in bon like bon livraison
-cadre devis
+add bon command number in field in bon
 

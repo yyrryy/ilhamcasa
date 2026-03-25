@@ -9,11 +9,12 @@
     <!-- <a href="/product/updatedevis?id={{devis.id}}" type="button" class="btn btn-primary me-5">
         Modifier
     </a> -->
-    
-    {% if not devis.isgenerated %}
+    {% if not devis.bon %}
     <a type="button" class="btn btn-primary" href="/product/genererdevistobonpage?id={{devis.id}}">
         Generer Bon
     </a>
+    {%else%}
+    Bon livraison: {{devis.bon.receipt_no}}
     {% endif %}
 
     <!-- <button onclick="printfacture({{devis.id}})" type="button" class="btn btn-primary">
