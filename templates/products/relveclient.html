@@ -6,33 +6,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
     <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <script src="/static/css/tailwind.css"></script>
 </head>
 <body>
-    <div class="container w-75">
-      <a class="btn btn-dark" href="/ledger/customer/{{customer.id}}/ledger/details/">
+  <a class="btn btn-dark" href="/ledger/customer/{{customer.id}}/ledger/details/">
         Retour
       </a>
       <button class="btn btn-primary" onclick="prt()">
         Imprimer
       </button>
-        <div class="" id="print">
-                Relvé Client: {{customer.customer_name}} <br>
-                du {{start_date}} au {{end_date}}
-            <table class="table mt-3">
+  <main class="max-w-5xl mx-auto border border-gray-500 p-10" style="height: 297mm;" id="print">
+
+        <!-- Top gold bar -->
+        <div class="h-3 bg-[#d4a017] mb-8"></div>
+
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+
+            <!-- Logo -->
+            <div class="w-64">
+            <img 
+            src="{%if user.retailer_user.retailer.logo%}{{user.retailer_user.retailer.logo.url}}{%endif%}"
+            alt="Logo SAS AUTO - Service Automobile Spécialisé"
+            class="w-full h-auto"
+            loading="lazy"
+            style="width: 115px;"
+            />
+            <!-- Logo placeholder due to unknown licensing in source PDF -->
+            </div>
+
+            <h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
+            Relvé Client
+            </h1>
+
+        </header>
+
+        <hr class="my-6 border-gray-400">
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+            <!-- Left meta -->
+            <div>
+                <ul class="text-sm space-y-1">
+                    <li><strong>Du :</strong>{{start_date}} <br>
+                      <strong>Au :</strong>{{end_date}}</li>
+                    
+                </ul>
+
+               
+
+            </div>
+
+            <!-- Right meta -->
+            <div class="text-sm">
+
+               
+                <ul class="space-y-1">
+                    <li>Client: {{customer.customer_name}}</li>
+                    {% if bon.customer.ice %}<li>ICE: {{bon.customer.ice}}</li>{%endif%}
+                    
+                </ul>
+
+            </div>
+
+        </section>
+
+        <!-- Table -->
+        <section >
+            <table class="w-full border-collapse text-sm table-striped border border-gray-800">
+
                 <thead>
-                  <tr>
-                    <td>Date</td>
-                    <td>N° bon</td>
-                    <td>Debit</td>
-                    <td>Credit</td>
-                  </tr>
+                    <tr class="bg-[#d4a017] text-white text-left">
+                    <th class="p-2 border border-gray-800">Date</th>
+                    <th class="p-2 border border-gray-800">Designation</th>
+                    <th class="p-2 border border-gray-800">Debit</th>
+                    <!-- <th class="p-2 border border-gray-800">Unité</th> -->
+                    <th class="p-2 border border-gray-800">Credit</th>
+                    </tr>
                 </thead>
-                <tbody>
-                  {% for i in releve %}
+
+                <tbody class="divide-y">
+
+                   {% for i in releve %}
                     <tr>
                       <td>
                         {% if i.1 == 'bon'%}
-                        {{i.0.datebon|date:'d/m/Y H:i'}}
+                        {{i.0.datebon|date:'d/m/Y'}}
                         {% elif i.1 == 'avoir'%}
                           {% if i.0.dateavoir == None %}{{i.0.created_at|date:"d/m/Y"}}{% else %}  {{i.0.dateavoir|date:"d/m/Y"}} {% endif %}
                         {% elif i.1 == 'reglement' or i.1 == 'relementsupp' or i.1 == 'avoirsupp' %}
@@ -84,43 +142,94 @@
 
                     </tr>
                   {% endfor %}
-                  <tr>
+                    <tr class="bg-[#d4a017] text-white">
                     <td colspan="2">Totaux</td>
                     <td>{{totaldebit|floatformat:2}}</td>
                     <td>{{totalcredit|floatformat:2}}</td>
-                    <td>Soldperiode: {{soldperiod|floatformat:2}}</td>
                    <!--  <td>Sold: {{customer.rest|floatformat:2}}</td> -->
                   </tr>
 
-
-                      <!-- {% if item in bons %}
-                      {% elif item in avoirs %}
-                        <td>Bon Avoir</td>
-                        <td>{{ item.receipt_no }}</td>
-                        <td></td>
-                        <td>{{ item.grand_total }}</td>
-                      {% else %}
-                        <td>Reglement</td>
-                        <td></td>
-                        <td></td>
-                        <td>{{ item.amount }}</td>
-                      {% endif %} -->
                 </tbody>
 
-              </table>
-                <strong>
-                  sold client: {{customer.sold|floatformat:2 }}  DH
-                </strong> 
-        </div>
+            </table>
 
-    </div>
+        </section>
+
+        <!-- Totals -->
+        <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div class="text-sm">
+
+            <!-- <p class="font-semibold">
+            ARRETE LA PRESENTE FACTURE A LA SOMME DE :
+            </p>
+
+            <p class="mt-2">
+            Dirhams.
+            </p> -->
+
+            
+
+            </div>
+
+            <div class="text-sm max-w-xs ml-auto">
+
+
+
+
+            <div class="flex justify-between items-center border mt-2">
+            <span class="bg-[#d4a017] text-white px-3 py-1 font-semibold">
+            Sold periode:
+            </span>
+
+            <span class="px-4 font-bold">
+            {{soldperiod|floatformat:2}}  DH
+            </span>
+
+            </div>
+
+            <div class="flex justify-between items-center border mt-2">
+            <span class="bg-[#d4a017] text-white px-3 py-1 font-semibold">
+            Sold client total:
+            </span>
+
+            <span class="px-4 font-bold">
+            {{customer.sold|floatformat:2 }}  DH
+            </span>
+
+            </div>
+
+            </div>
+
+        </section>
+
+        <!-- <footer class="text-center text-xs mt-12 border-t pt-4">
+
+            <p>
+            SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088
+            </p>
+
+            <p>
+            5 BD ABDELLAH BEN YASSINE IMM BELLEDONNE ETAGE 5 N°5, CASABLANCA
+            </p>
+
+            <p>
+            E-mail: Faris.sasauto@gmail.com -- Tel : 0660638487 / 0633151635
+            </p>
+
+        </footer>
+
+        <div class="h-3 bg-[#d4a017] mt-10"></div> -->
+
+    </main>
+    
     <script>
         function prt(){
             var printContents = document.getElementById('print').innerHTML;
             var originalContents = document.body.innerHTML;
             document.body.innerHTML = printContents;
-            document.querySelector('.table').style.fontSize= '11px'
-            document.querySelectorAll('td').forEach(el => el.style.padding = '1px');
+            // document.querySelector('.table').style.fontSize= '11px'
+            // document.querySelectorAll('td').forEach(el => el.style.padding = '1px');
             document.body.classList.add('p-3')
             window.print();
             document.body.innerHTML = originalContents;
