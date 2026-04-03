@@ -655,7 +655,6 @@ def relvesupp(request):
     # totalpayments=payments.aggregate(total=Sum('amount'))['total'] or 0
     # sales_and_returns = sorted(chain(bons, payments, avoirs), key=lambda item: item.date)
     supplierid=request.GET.get('supplier')
-    print('>>>', supplierid)
     supplier=Supplier.objects.get(pk=supplierid)
     startdate=request.GET.get('start')
     enddate=request.GET.get('end')

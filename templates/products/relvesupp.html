@@ -6,79 +6,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
     <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <script src="/static/css/tailwind.css"></script>
+
 </head>
 <body>
-    <div class="container w-75 m-auto">
-        <button class="btn btn-primary" onclick="prt()">
-            Imprimer
-        </button>
-        <div class="mt-5" id="print">
-            Relvé du {{start_date}} au {{end_date}}
-          <br>
-            Fournisseur: {{supplier}}
+  <a class="btn btn-dark" href="/product/supplierinfo/{{supplier.id}}">
+        Retour
+      </a>
+      <button class="btn btn-primary" onclick="prt()">
+        Imprimer
+      </button>
+  <main class="max-w-5xl mx-auto border border-gray-500 p-10" style="height: 297mm;" id="print">
 
-          <!-- <table class="table table-bordered mt-2">
-            <thead>
-              <th>Fournisseur</th>
-              <th>Total</th>
-              <th>Paiments</th>
-              <th>Avoirs</th>
-              <th>Reste</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  {{supplier}}
-                </td>
-                <td>
-                  {{supplier.total|floatformat:2 }}  DH
-                </td>
-                <td>
-                  {{totalpayments|floatformat:2 }}  DH
-                </td>
-                <td>
-                  {{totalavoirs|floatformat:2 }}  DH
-                </td>
-                <td>
-                  {{supplier.rest|floatformat:2 }}  DH
-                </td>
-              </tr>
-            </tbody>
-          </table> -->
-            <!-- <div class="d-flex">
-              <div>
-                <strong>
-                  Relvé de {{supplier}} <br>
-                  du {{start_date}} au {{end_date}}
-                </strong>
-              </div>
-              <div>
+        <!-- Top gold bar -->
+        <div class="h-3 bg-[#d4a017] mb-8"></div>
 
-                <strong>
-                  Total: {{totalbons}}
-                </strong>
-                <strong>
-                  Paiments: {{totalpayments}}
-                </strong>
-                <strong>
-                  Rest: {{rest}}
-                </strong>
-              </div>
-            </div> -->
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
-            <table class="table mt-3">
+            <!-- Logo -->
+            <div class="w-64">
+            <img 
+            src="{%if user.retailer_user.retailer.logo%}{{user.retailer_user.retailer.logo.url}}{%endif%}"
+            alt="Logo SAS AUTO - Service Automobile Spécialisé"
+            class="w-full h-auto"
+            loading="lazy"
+            style="width: 115px;"
+            />
+            <!-- Logo placeholder due to unknown licensing in source PDF -->
+            </div>
+
+            <h1 class="text-5xl font-bold tracking-wide text-center md:text-right flex-1">
+            Relvé Fournisseur
+            </h1>
+
+        </header>
+
+        <hr class="my-6 border-gray-400">
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+            <!-- Left meta -->
+            <div>
+                <ul class="text-sm space-y-1">
+                    <li><strong>Du :</strong>{{start_date}} <br>
+                      <strong>Au :</strong>{{end_date}}</li>
+                    
+                </ul>
+
+               
+
+            </div>
+
+            <!-- Right meta -->
+            <div class="text-sm">
+
+               
+                <ul class="space-y-1">
+                    <li>fournisseur: {{supplier}}</li>
+                    
+                </ul>
+
+            </div>
+
+        </section>
+
+        <!-- Table -->
+        <section >
+            <table class="w-full border-collapse text-sm table-striped border border-gray-800">
+
                 <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>N° bon</th>
-                    <th>Debit</th>
-                    <th>Credit</th>
-                    <th></th>
-                    <th></th>
-                  </tr>
+                    <tr class="bg-[#d4a017] text-white text-left">
+                    <th class="p-2 border border-gray-800">Date</th>
+                    <th class="p-2 border border-gray-800">Designation</th>
+                    <th class="p-2 border border-gray-800">Debit</th>
+                    <!-- <th class="p-2 border border-gray-800">Unité</th> -->
+                    <th class="p-2 border border-gray-800">Credit</th>
+                    </tr>
                 </thead>
-                <tbody>
-                  {% for i in releve %}
+
+                <tbody class="divide-y">
+
+                   {% for i in releve %}
                   <tr>
                     <td>
                         {% if i.1 == 'bon' %}
@@ -147,26 +155,97 @@
                     <td>
                       {{totalcredit|floatformat:2}} DH
                     </td>
-                    <td>Sold</td>
+                    <!-- <td>Sold</td>
                     <td>
                       {{sold|floatformat:2}} DH
-                    </td>
+                    </td> -->
                   </tr>
-                </tbody>
-              </table>
-              <!-- <strong>
-                Le reste: {{supplier.rest}} DH
-              </strong> -->
-        </div>
 
-    </div>
+                </tbody>
+
+            </table>
+
+        </section>
+
+        <!-- Totals -->
+        <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div class="text-sm">
+
+            <!-- <p class="font-semibold">
+            ARRETE LA PRESENTE FACTURE A LA SOMME DE :
+            </p>
+
+            <p class="mt-2">
+            Dirhams.
+            </p> -->
+
+            
+
+            </div>
+
+            <div class="text-sm max-w-xs ml-auto">
+
+
+
+
+            <!-- <div class="flex justify-between items-center border mt-2">
+            <span class="bg-[#d4a017] text-white px-3 py-1 font-semibold">
+            Sold periode:
+            </span>
+
+            <span class="px-4 font-bold">
+            {{soldperiod|floatformat:2}}  DH
+            </span>
+
+            </div> -->
+
+            <div class="flex justify-between items-center border mt-2">
+            <span class="bg-[#d4a017] text-white px-3 py-1 font-semibold">
+            Sold fournisseur total:
+            </span>
+
+            <span class="px-4 font-bold">
+            {{sold|floatformat:2 }}  DH
+            </span>
+
+            </div>
+
+            </div>
+
+        </section>
+
+        <!-- <footer class="text-center text-xs mt-12 border-t pt-4">
+
+            <p>
+            SAS AUTO. RC : 710523 -- Pat : 32504160 -- IF : 71743124 -- CNSS : 6656496 -- ICE : 003878707000088
+            </p>
+
+            <p>
+            5 BD ABDELLAH BEN YASSINE IMM BELLEDONNE ETAGE 5 N°5, CASABLANCA
+            </p>
+
+            <p>
+            E-mail: Faris.sasauto@gmail.com -- Tel : 0660638487 / 0633151635
+            </p>
+
+        </footer>
+
+        <div class="h-3 bg-[#d4a017] mt-10"></div> -->
+
+    </main>
+
+
+
+
+    
     <script>
         function prt(){
           var printContents = document.getElementById('print').innerHTML;
           var originalContents = document.body.innerHTML;
           document.body.innerHTML = printContents;
-          document.querySelector('.table').style.fontSize= '11px'
-          document.querySelectorAll('td').forEach(el => el.style.padding = '1px');
+          // document.querySelector('.table').style.fontSize= '11px'
+          // document.querySelectorAll('td').forEach(el => el.style.padding = '1px');
           document.body.classList.add('p-3')
           window.print();
           document.body.innerHTML = originalContents;
