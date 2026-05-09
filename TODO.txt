@@ -25,6 +25,7 @@ reglement bon acht in bon like bon livraison..
 devis generer bon..
 quantity before price in creation facture..
 cadre devis..
-quantity before price in creation devis
-add bon command number in field in bon
+quantity before price in creation devis..
+add bon command number in field in bon..
+matriculation of bon show in list bon, also search for matriculation in list bons
 
